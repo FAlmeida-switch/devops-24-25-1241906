@@ -28,17 +28,21 @@ import javax.persistence.Id;
 @Entity // <1>
 public class Employee {
 
-	private @Id @GeneratedValue Long id; // <2>
+	private @Id
+	@GeneratedValue Long id; // <2>
 	private String firstName;
 	private String lastName;
 	private String description;
+	private int jobYears;
 
-	protected Employee() {}
+	protected Employee() {
+	}
 
-	public Employee(String firstName, String lastName, String description) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.description = description;
+	public Employee(String firstName, String lastName, String description, int jobYears) throws IllegalArgumentException{
+		setFirstName(firstName);
+		setLastName(lastName);
+		setDescription(description);
+		setJobYears(jobYears);
 	}
 
 	@Override
@@ -47,9 +51,10 @@ public class Employee {
 		if (o == null || getClass() != o.getClass()) return false;
 		Employee employee = (Employee) o;
 		return Objects.equals(id, employee.id) &&
-			Objects.equals(firstName, employee.firstName) &&
-			Objects.equals(lastName, employee.lastName) &&
-			Objects.equals(description, employee.description);
+				Objects.equals(firstName, employee.firstName) &&
+				Objects.equals(lastName, employee.lastName) &&
+				Objects.equals(description, employee.description) &&
+				Objects.equals(jobYears, employee.jobYears);
 	}
 
 	@Override
@@ -62,7 +67,9 @@ public class Employee {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Long id) throws IllegalArgumentException {
+		if (id == null)
+			throw new IllegalArgumentException("The ID can't be null.");
 		this.id = id;
 	}
 
@@ -70,34 +77,47 @@ public class Employee {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) throws IllegalArgumentException {
+		if (firstName == null || firstName.trim().isEmpty())
+			throw new IllegalArgumentException("The firstName can't be null or empty.");
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
-	}
+	public String getLastName() { return lastName; }
 
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName) throws IllegalArgumentException {
+			if (lastName == null || lastName.trim().isEmpty())
+				throw new IllegalArgumentException("The lastName can't be null or empty.");
 		this.lastName = lastName;
 	}
 
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
-	public void setDescription(String description) {
+	public void setDescription(String description) throws IllegalArgumentException {
+			if (description == null || description.trim().isEmpty())
+				throw new IllegalArgumentException("The description can't be null or empty.");
 		this.description = description;
 	}
+
+	public int getJobYears() {return jobYears;}
+
+	public void setJobYears(int jobYears) throws IllegalArgumentException {
+			if (jobYears < 0)
+				throw new IllegalArgumentException("jobYears can't be negative.");
+			this.jobYears = jobYears;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "Employee{" +
-			"id=" + id +
-			", firstName='" + firstName + '\'' +
-			", lastName='" + lastName + '\'' +
-			", description='" + description + '\'' +
-			'}';
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", description='" + description + '\'' +
+				", jobYears='" + jobYears + '\'' +
+				'}';
 	}
 }
 // end::code[]
