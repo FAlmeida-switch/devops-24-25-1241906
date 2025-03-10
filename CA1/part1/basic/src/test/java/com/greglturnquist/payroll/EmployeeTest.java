@@ -25,21 +25,21 @@ class EmployeeTest {
     @Test
     void shouldReturnCorrectValuesFromGetters() {
         //arrange
-        Employee e1 = new Employee("John", "Doe", "Developer", 5);
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", 5);
 
         //act + assert
-        assertEquals("John", e1.getFirstName());
-        assertEquals("Doe", e1.getLastName());
+        assertEquals("Joao", e1.getFirstName());
+        assertEquals("Almeida", e1.getLastName());
         assertEquals("Developer", e1.getDescription());
         assertEquals(5, e1.getJobYears());
     }
 
     public static Stream<Arguments> invalidConstructorArguments() {
         return Stream.of(
-                Arguments.of(null, "almeida", "descrição", 1),
-                Arguments.of("joao", null, "descrição", 50),
-                Arguments.of("joao", "almeida", null, 25),
-                Arguments.of("joao", "almeida", "descrição", -12)
+                Arguments.of(null, "Almeida", "Descrição", 1),
+                Arguments.of("Joao", null, "Descrição", 50),
+                Arguments.of("Joao", "Almeida", null, 25),
+                Arguments.of("Joao", "Almeida", "Descrição", -12)
         );
     }
 
@@ -51,10 +51,10 @@ class EmployeeTest {
 
     public static Stream<Arguments> shouldThrowExceptionWithDifferentInvalidInputsParameterizedTest() {
         return Stream.of(
-                Arguments.of(null, "almeida", "descrição", 1),
-                Arguments.of("joao", null, "descrição", 50),
-                Arguments.of("joao", "almeida", null, 25),
-                Arguments.of("joao", "almeida", "descrição", -12)
+                Arguments.of(null, "Almeida", "Descrição", 1),
+                Arguments.of("Joao", null, "Descrição", 50),
+                Arguments.of("Joao", "Almeida", null, 25),
+                Arguments.of("Joao", "Álmeida", "Descrição", -12)
         );
     }
 
@@ -62,7 +62,7 @@ class EmployeeTest {
     @MethodSource("shouldThrowExceptionWithDifferentInvalidInputsParameterizedTest")
     void shouldThrowExceptionWithDifferentInvalidInputs(String firstName, String lastName, String description, int jobYears) throws IllegalArgumentException {
         // arrange
-        Employee e1 = new Employee("firstName", "lastName", "description", 0);
+        Employee e1 = new Employee("FirstName", "LastName", "Description", 0);
 
         // act + assert
         if(firstName == null)
@@ -77,8 +77,8 @@ class EmployeeTest {
 
     @Test
     void shouldReturnTrueForEqualObjects() {
-        Employee e1 = new Employee("John", "Doe", "Developer", 5);
-        Employee e2 = new Employee("John", "Doe", "Developer", 5);
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", 5);
+        Employee e2 = new Employee("Joao", "Almeida", "Developer", 5);
 
         assertEquals(e1, e2);
         assertEquals(e1.hashCode(), e2.hashCode());
@@ -86,8 +86,8 @@ class EmployeeTest {
 
     @Test
     void shouldReturnFalseForNonEqualObjects() {
-        Employee e1 = new Employee("John", "Doe", "Developer", 5);
-        Employee e2 = new Employee("Jane", "Doe", "Developer", 5);
+        Employee e1 = new Employee("Joao", "Ferreira", "Developer", 5);
+        Employee e2 = new Employee("Joana", "Almeida", "Developer", 5);
 
         assertNotEquals(e1, e2);
         assertNotEquals(e1.hashCode(), e2.hashCode());
