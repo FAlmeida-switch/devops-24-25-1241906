@@ -33,15 +33,17 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String description;
+	private String email;
 	private int jobYears;
 
 	protected Employee() {
 	}
 
-	public Employee(String firstName, String lastName, String description, int jobYears) throws IllegalArgumentException{
+	public Employee(String firstName, String lastName, String description, String email, int jobYears) throws IllegalArgumentException{
 		setFirstName(firstName);
 		setLastName(lastName);
 		setDescription(description);
+		setEmail(email);
 		setJobYears(jobYears);
 	}
 
@@ -86,28 +88,39 @@ public class Employee {
 	public String getLastName() { return lastName; }
 
 	public void setLastName(String lastName) throws IllegalArgumentException {
-			if (lastName == null || lastName.trim().isEmpty())
-				throw new IllegalArgumentException("The lastName can't be null or empty.");
+		if (lastName == null || lastName.trim().isEmpty())
+			throw new IllegalArgumentException("The lastName can't be null or empty.");
 		this.lastName = lastName;
 	}
 
 	public String getDescription() { return description; }
 
 	public void setDescription(String description) throws IllegalArgumentException {
-			if (description == null || description.trim().isEmpty())
-				throw new IllegalArgumentException("The description can't be null or empty.");
+		if (description == null || description.trim().isEmpty())
+			throw new IllegalArgumentException("The description can't be null or empty.");
 		this.description = description;
+	}
+
+	public String getEmail() { return email; }
+
+	public void setEmail(String email) throws IllegalArgumentException {
+		if (email == null || email.isEmpty()) {
+			throw new IllegalArgumentException("The email isn't valid.");
+		}
+		if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+			this.email = email;
+		} else {
+			throw new IllegalArgumentException("The email isn't valid.");
+		}
 	}
 
 	public int getJobYears() {return jobYears;}
 
 	public void setJobYears(int jobYears) throws IllegalArgumentException {
-			if (jobYears < 0)
-				throw new IllegalArgumentException("jobYears can't be negative.");
-			this.jobYears = jobYears;
+		if (jobYears < 0)
+			throw new IllegalArgumentException("jobYears can't be negative.");
+		this.jobYears = jobYears;
 	}
-
-
 
 	@Override
 	public String toString() {
