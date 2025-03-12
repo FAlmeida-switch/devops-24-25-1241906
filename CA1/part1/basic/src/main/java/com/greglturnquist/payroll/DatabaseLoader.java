@@ -35,7 +35,7 @@ public class DatabaseLoader implements CommandLineRunner { // <2>
 
 	@Override
 	public void run(String... strings) throws IllegalArgumentException { // <4>
-		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer", 24));
+		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer", "12345@gmail.com",24));
 	}
 }
 // end::code[]

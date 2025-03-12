@@ -6,14 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e14e3b30-197f-4bc4-87bf-cbabebb992e8" name="Changes" comment="Added EmployeeTest.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/README.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/part1/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/basic.iml" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/basic.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/DatabaseLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/DatabaseLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part1/basic/src/main/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/test/java/com/greglturnquist/payroll/EmployeeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/test/java/com/greglturnquist/payroll/EmployeeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../readme.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,48 +47,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;JUnit.All in .mvn.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in react-and-spring-data-rest-basic.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in react-and-spring-data-rest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.shouldCreateValidEmployee.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithInvalidConstructorArguments.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.app.js.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ReactAndSpringDataRestApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Franc/OneDrive/Documents/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906/CA1&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.All in .mvn.executor": "Run",
+    "JUnit.All in react-and-spring-data-rest-basic.executor": "Run",
+    "JUnit.All in react-and-spring-data-rest.executor": "Run",
+    "JUnit.EmployeeTest.executor": "Run",
+    "JUnit.EmployeeTest.shouldCreateValidEmployee.executor": "Run",
+    "JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest.executor": "Run",
+    "JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters.executor": "Run",
+    "JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs.executor": "Run",
+    "JUnit.EmployeeTest.shouldThrowExceptionWithInvalidConstructorArguments.executor": "Run",
+    "Node.js.app.js.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.ReactAndSpringDataRestApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "create.test.in.the.same.root": "true",
+    "git-widget-placeholder": "email-field",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Franc/OneDrive/Documents/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906/CA1",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -123,6 +120,22 @@
       <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
       <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EmployeeTest.shouldCreateValidEmployee" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="react-and-spring-data-rest-basic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greglturnquist.payroll.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
+      <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
+      <option name="METHOD_NAME" value="shouldCreateValidEmployee" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -159,29 +172,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="react-and-spring-data-rest-basic" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.greglturnquist.payroll.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
-      <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
-      <option name="METHOD_NAME" value="shouldThrowExceptionWithDifferentInvalidInputs(java.lang.String,java.lang.String,java.lang.String,int)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.EmployeeTest" />
+        <item itemvalue="JUnit.EmployeeTest.shouldCreateValidEmployee" />
         <item itemvalue="JUnit.All in react-and-spring-data-rest" />
         <item itemvalue="JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters" />
         <item itemvalue="JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest" />
-        <item itemvalue="JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs" />
       </list>
     </recent_temporary>
   </component>
@@ -212,6 +209,7 @@
       <workItem from="1741626081768" duration="1154000" />
       <workItem from="1741690622657" duration="5012000" />
       <workItem from="1741701543008" duration="90000" />
+      <workItem from="1741704646760" duration="9584000" />
     </task>
     <task id="LOCAL-00001" summary="Added jobYears attribute alongside it's setter and getter.">
       <option name="closed" value="true" />
