@@ -105,7 +105,7 @@ public class Employee {
 
 	public void setEmail(String email) throws IllegalArgumentException {
 		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("The email isn't valid.");
+			throw new IllegalArgumentException("The email can't be null or empty.");
 		}
 		if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
 			this.email = email;
