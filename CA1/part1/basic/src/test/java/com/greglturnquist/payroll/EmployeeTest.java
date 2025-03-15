@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeTest {
 
-
     @Test
     void shouldCreateEmployeeUsingProtectedConstructor() {
         // Arrange
@@ -28,58 +27,104 @@ class EmployeeTest {
     }
 
     @Test
+    void shouldReturnTrueWhenComparedToItself() {
+        //Arrange
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+
+        //Act + Assert
+        assertEquals(e1, e1);
+    }
+
+
+    @Test
     void shouldReturnTrueForEqualObjects() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("jose", "almeida", "ring bearer", "12345@gmail.com", 12);
         Employee e2 = new Employee("jose", "almeida", "ring bearer", "12345@gmail.com", 12);
 
-        //act + assert
+        //Act + Assert
         assertEquals(e1, e2);
         assertEquals(e1.hashCode(), e2.hashCode());
     }
 
     @Test
     void shouldReturnFalseForNonEqualObjects() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("Joao", "Ferreira", "Developer", "12345@gmail.com", 5);
         Employee e2 = new Employee("Joana", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        //act + assert
+        //Act + Assert
         assertNotEquals(e1, e2);
         assertNotEquals(e1.hashCode(), e2.hashCode());
     }
 
     @Test
     void shouldReturnFalseWhenComparedToNull() {
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        assertNotEquals(null, e1);
+        //Act + Assert
+        assertFalse(e1.equals(null));
     }
 
     @Test
     void shouldReturnFalseWhenComparedToDifferentClass() {
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
         String differentClassObject = "Not an Employee";
 
-        assertNotEquals(differentClassObject, e1);
+        //Act + Assert
+        assertFalse(e1.equals(differentClassObject));
     }
+
 
     @Test
     void shouldCreateValidEmployee() throws IllegalArgumentException {
-        //arrange
-
-        //act
+        //Arrange
         Employee e1 = new Employee("jose", "almeida", "ring bearer", "12345@gmail.com", 12);
-        //assert
+
+        //Act + Assert
         assertNotNull(e1);
     }
 
     @Test
+    void shouldReturnFalseForDifferentId() {
+        //Arrange
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+        e1.setId(1L);
+        Employee e2 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+        e2.setId(2L);
+
+        //Act + Assert
+        assertNotEquals(e1, e2);
+    }
+
+    @Test
+    void shouldReturnFalseForDifferentLastName() {
+        //Arrange
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+        Employee e2 = new Employee("Joao", "Ferreira", "Developer", "12345@gmail.com", 5);
+
+        //Act + Assert
+        assertNotEquals(e1, e2);
+    }
+
+    @Test
+    void shouldReturnFalseForDifferentDescription() {
+        //Arrange
+        Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+        Employee e2 = new Employee("Joao", "Almeida", "Manager", "12345@gmail.com", 5);
+
+        //Act + Assert
+        assertNotEquals(e1, e2);
+    }
+
+    @Test
     void shouldReturnCorrectValuesFromGetters() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        //act + assert
+        //Act + Assert
         assertEquals("Joao", e1.getFirstName());
         assertEquals("Almeida", e1.getLastName());
         assertEquals("Developer", e1.getDescription());
@@ -89,32 +134,32 @@ class EmployeeTest {
 
     @Test
     void shouldSetCorrectValuesIdSetter() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        //act
+        //Act
         e1.setId((long) 123456);
 
-        //assert
+        //Assert
         assertEquals(123456, e1.getId());
     }
 
     @Test
     void shouldReturnExceptionIfNullIdSetter() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        //assert
+        //Act + Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () -> e1.setId(null));
         assertEquals("The ID can't be null.", exception.getMessage());
     }
 
     @Test
     void shouldReturnExceptionIfInvalidEmailSetter() {
-        //arrange
+        //Arrange
         Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
 
-        //assert
+        //Act + Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () -> e1.setEmail("º~*`"));
         assertEquals("The email isn't valid.", exception.getMessage());
     }
@@ -153,71 +198,16 @@ class EmployeeTest {
 
     @Test
     public void testToString() {
+        //Arrange
         Employee employee = new Employee("John", "Doe", "Developer", "john.doe@example.com", 5);
+
+        //Act
         employee.setId(1L);
 
         String expected = "Employee{id=1, firstName='John', lastName='Doe', description='Developer', jobYears='5'}";
         String actual = employee.toString();
 
+        //Assert
         assertEquals(expected, actual);
     }
 }
-
-//public static Stream<Arguments> shouldThrowExceptionWithDifferentInvalidInputsParameterizedTest() {
-//    return Stream.of(
-//            Arguments.of(null, "Almeida", "Descrição", "12345@gmail.com", 1),
-//            Arguments.of("Joao", null, "Descrição", "12345@gmail.com", 50),
-//            Arguments.of("Joao", "Almeida", null, "12345@gmail.com", 25),
-//            Arguments.of("Joao", "Álmeida", "Descrição", "12345@gmail.com", -12)
-//    );
-//    @ParameterizedTest
-//    @MethodSource("shouldThrowExceptionWithDifferentInvalidInputsParameterizedTest")
-//    void shouldThrowExceptionWithDifferentInvalidInputs(String firstName, String lastName, String description, String email, int jobYears) throws IllegalArgumentException {
-//        // arrange
-//        Employee e1 = new Employee("FirstName", "LastName", "Description","12345@gmail.com", 0);
-//
-//        // act + assert
-//        if(firstName == null)
-//            assertThrows(IllegalArgumentException.class, () -> e1.setFirstName(firstName));
-//        else if(lastName == null)
-//            assertThrows(IllegalArgumentException.class, () -> e1.setLastName(lastName));
-//        else if(description == null)
-//            assertThrows(IllegalArgumentException.class, () -> e1.setDescription(description));
-//        else if(email == null)
-//            assertThrows(IllegalArgumentException.class, () -> e1.setEmail(email));
-//        else if(jobYears < 0)
-//            assertThrows(IllegalArgumentException.class, () -> e1.setJobYears(jobYears));
-//    }
-
-
-//    @Test
-//    void shouldSetCorrectValuesFirstNameSetter() {
-//        //arrange
-//        Employee e1 = new Employee("Joao", "Almeida", "Developer","12345@gmail.com", 5);
-//
-//        //act
-//        e1.setFirstName("José");
-//
-//        //assert
-//        assertEquals("José", e1.getFirstName());
-//    }
-
-//    @Test
-//    void shouldReturnExceptionInFirstNameNullSetter() {
-//        //arrange
-//        Employee e1 = new Employee("Joao", "Almeida", "Developer","12345@gmail.com", 5);
-//
-//        //assert
-//        Exception exception = assertThrows(IllegalArgumentException.class, () -> e1.setFirstName(null));
-//        assertEquals("The firstName can't be null or empty.", exception.getMessage());
-//    }
-
-//    @Test
-//    void shouldReturnExceptionInFirstNameEmptySetter() {
-//        //arrange
-//        Employee e1 = new Employee("Joao", "Almeida", "Developer","12345@gmail.com", 5);
-//
-//        //assert
-//        Exception exception = assertThrows(IllegalArgumentException.class, () -> e1.setFirstName(""));
-//        assertEquals("The firstName can't be null or empty.", exception.getMessage());
-//    }
