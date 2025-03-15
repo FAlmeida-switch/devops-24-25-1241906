@@ -7,10 +7,6 @@
     <list default="true" id="e14e3b30-197f-4bc4-87bf-cbabebb992e8" name="Changes" comment="Added EmployeeTest.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/DatabaseLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/DatabaseLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js.map" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,12 +50,34 @@
     "JUnit.All in .mvn.executor": "Run",
     "JUnit.All in react-and-spring-data-rest-basic.executor": "Run",
     "JUnit.All in react-and-spring-data-rest.executor": "Run",
-    "JUnit.EmployeeTest.executor": "Run",
+    "JUnit.DatabaseLoaderTest.executor": "Coverage",
+    "JUnit.DatabaseLoaderTest.run_shouldSaveEmployee.executor": "Run",
+    "JUnit.EmployeeTest.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldCreateEmployeeUsingProtectedConstructor.executor": "Coverage",
     "JUnit.EmployeeTest.shouldCreateValidEmployee.executor": "Run",
     "JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest.executor": "Run",
     "JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters.executor": "Run",
+    "JUnit.EmployeeTest.shouldReturnExceptionIfInvalidEmailSetter.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnExceptionInFirstNameEmptySetter.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnExceptionInFirstNameSetter.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnExceptionInIdSetter.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseForDifferentDescription.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseForDifferentId.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseForDifferentLastName.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseForNonEqualObjects.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnFalseWhenComparedToNull.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnTrueForEqualObjects.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnTrueIfEqualsOverrideIsVerified.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldReturnValuesFromGetters.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldSetCorrectValuesFirstNameSetter.executor": "Run",
+    "JUnit.EmployeeTest.shouldSetCorrectValuesIdSetter.executor": "Coverage",
+    "JUnit.EmployeeTest.shouldSetCorrectValuesOnSetters.executor": "Run",
     "JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs.executor": "Run",
+    "JUnit.EmployeeTest.shouldThrowExceptionWithEmptyConstructorArguments.executor": "Run",
     "JUnit.EmployeeTest.shouldThrowExceptionWithInvalidConstructorArguments.executor": "Run",
+    "JUnit.EmployeeTest.shouldThrowExceptionWithNullConstructorArguments.executor": "Coverage",
+    "JUnit.EmployeeTest.testToString.executor": "Coverage",
     "Node.js.app.js.executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
@@ -100,11 +118,34 @@
       <recent name="com.greglturnquist.payroll" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.EmployeeTest">
-    <configuration name="All in react-and-spring-data-rest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="react-and-spring-data-rest" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+  <component name="RunManager" selected="JUnit.DatabaseLoaderTest">
+    <configuration name="DatabaseLoaderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="react-and-spring-data-rest-basic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greglturnquist.payroll.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
+      <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.DatabaseLoaderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DatabaseLoaderTest.run_shouldSaveEmployee" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="react-and-spring-data-rest-basic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greglturnquist.payroll.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
+      <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.DatabaseLoaderTest" />
+      <option name="METHOD_NAME" value="run_shouldSaveEmployee" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -124,7 +165,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EmployeeTest.shouldCreateValidEmployee" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="react-and-spring-data-rest-basic" />
       <extension name="coverage">
         <pattern>
@@ -134,13 +175,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
       <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
-      <option name="METHOD_NAME" value="shouldCreateValidEmployee" />
+      <option name="METHOD_NAME" value="shouldReturnFalseWhenComparedToDifferentClass" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EmployeeTest.shouldFail_setId_IfFirstNameNullTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="EmployeeTest.shouldReturnFalseWhenComparedToNull" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="react-and-spring-data-rest-basic" />
       <extension name="coverage">
         <pattern>
@@ -150,23 +191,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
       <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
-      <option name="METHOD_NAME" value="shouldFail_setId_IfFirstNameNullTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EmployeeTest.shouldReturnCorrectValuesFromGetters" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="react-and-spring-data-rest-basic" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.greglturnquist.payroll.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.greglturnquist.payroll" />
-      <option name="MAIN_CLASS_NAME" value="com.greglturnquist.payroll.EmployeeTest" />
-      <option name="METHOD_NAME" value="shouldReturnCorrectValuesFromGetters" />
+      <option name="METHOD_NAME" value="shouldReturnFalseWhenComparedToNull" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -174,11 +199,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.DatabaseLoaderTest" />
+        <item itemvalue="JUnit.DatabaseLoaderTest.run_shouldSaveEmployee" />
         <item itemvalue="JUnit.EmployeeTest" />
-        <item itemvalue="JUnit.EmployeeTest.shouldCreateValidEmployee" />
-        <item itemvalue="JUnit.All in react-and-spring-data-rest" />
-        <item itemvalue="JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters" />
-        <item itemvalue="JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest" />
+        <item itemvalue="JUnit.EmployeeTest.shouldReturnFalseWhenComparedToNull" />
+        <item itemvalue="JUnit.EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass" />
       </list>
     </recent_temporary>
   </component>
@@ -210,6 +235,13 @@
       <workItem from="1741690622657" duration="5012000" />
       <workItem from="1741701543008" duration="90000" />
       <workItem from="1741704646760" duration="9584000" />
+      <workItem from="1741799401918" duration="586000" />
+      <workItem from="1741884719367" duration="1643000" />
+      <workItem from="1741887870173" duration="1633000" />
+      <workItem from="1741953779430" duration="2094000" />
+      <workItem from="1741968288910" duration="601000" />
+      <workItem from="1741979823929" duration="29000" />
+      <workItem from="1742049948933" duration="4796000" />
     </task>
     <task id="LOCAL-00001" summary="Added jobYears attribute alongside it's setter and getter.">
       <option name="closed" value="true" />
@@ -228,8 +260,90 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.cmd" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="email-field" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added jobYears attribute alongside it's setter and getter." />
     <option name="LAST_COMMIT_MESSAGE" value="Added jobYears attribute alongside it's setter and getter." />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnExceptionInFirstNameSetter.ic" NAME="EmployeeTest.shouldReturnExceptionInFirstNameSetter Coverage Results" MODIFIED="1741888582673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_testToString.ic" NAME="EmployeeTest.testToString Coverage Results" MODIFIED="1741889319702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnValuesFromGetters.ic" NAME="EmployeeTest.shouldReturnValuesFromGetters Coverage Results" MODIFIED="1741885397125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest.ic" NAME="EmployeeTest Coverage Results" MODIFIED="1742053033203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseWhenComparedToDifferentClass.ic" NAME="EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass Coverage Results" MODIFIED="1742052636212" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseForDifferentId.ic" NAME="EmployeeTest.shouldReturnFalseForDifferentId Coverage Results" MODIFIED="1742052020258" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$DatabaseLoaderTest.ic" NAME="DatabaseLoaderTest Coverage Results" MODIFIED="1742053641192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnExceptionInFirstNameEmptySetter.ic" NAME="EmployeeTest.shouldReturnExceptionInFirstNameEmptySetter Coverage Results" MODIFIED="1741888628662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldCreateEmployeeUsingProtectedConstructor.ic" NAME="EmployeeTest.shouldCreateEmployeeUsingProtectedConstructor Coverage Results" MODIFIED="1741885540569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnTrueForEqualObjects.ic" NAME="EmployeeTest.shouldReturnTrueForEqualObjects Coverage Results" MODIFIED="1741886116768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldThrowExceptionWithNullConstructorArguments.ic" NAME="EmployeeTest.shouldThrowExceptionWithNullConstructorArguments Coverage Results" MODIFIED="1741888703328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnExceptionIfInvalidEmailSetter.ic" NAME="EmployeeTest.shouldReturnExceptionIfInvalidEmailSetter Coverage Results" MODIFIED="1741889157831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseWhenComparedToNull.ic" NAME="EmployeeTest.shouldReturnFalseWhenComparedToNull Coverage Results" MODIFIED="1742052872741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnExceptionInIdSetter.ic" NAME="EmployeeTest.shouldReturnExceptionInIdSetter Coverage Results" MODIFIED="1741888474497" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseForNonEqualObjects.ic" NAME="EmployeeTest.shouldReturnFalseForNonEqualObjects Coverage Results" MODIFIED="1741885947127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseForDifferentLastName.ic" NAME="EmployeeTest.shouldReturnFalseForDifferentLastName Coverage Results" MODIFIED="1742052083689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnTrueIfEqualsOverrideIsVerified.ic" NAME="EmployeeTest.shouldReturnTrueIfEqualsOverrideIsVerified Coverage Results" MODIFIED="1741885823389" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldReturnFalseForDifferentDescription.ic" NAME="EmployeeTest.shouldReturnFalseForDifferentDescription Coverage Results" MODIFIED="1742052132364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CA1$EmployeeTest_shouldSetCorrectValuesIdSetter.ic" NAME="EmployeeTest.shouldSetCorrectValuesIdSetter Coverage Results" MODIFIED="1741888163619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.greglturnquist.payroll.*</FILTER>
+    </SUITE>
   </component>
 </project>
