@@ -7,6 +7,11 @@
     <list default="true" id="e14e3b30-197f-4bc4-87bf-cbabebb992e8" name="Changes" comment="Added EmployeeTest.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1/LICENSE.code.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1/LICENSE.writing.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/java/com/greglturnquist/payroll/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/src/main/resources/static/built/bundle.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +97,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "create.test.in.the.same.root": "true",
-    "git-widget-placeholder": "email-field",
+    "git-widget-placeholder": "fix-invalid-email",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Franc/OneDrive/Documents/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906/CA1",
     "node.js.detected.package.eslint": "true",
@@ -242,6 +247,7 @@
       <workItem from="1741968288910" duration="601000" />
       <workItem from="1741979823929" duration="29000" />
       <workItem from="1742049948933" duration="4796000" />
+      <workItem from="1742144249544" duration="1632000" />
     </task>
     <task id="LOCAL-00001" summary="Added jobYears attribute alongside it's setter and getter.">
       <option name="closed" value="true" />

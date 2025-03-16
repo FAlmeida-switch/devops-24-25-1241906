@@ -6,23 +6,26 @@
 
 **Author:** Francisco Almeida
 
-## CA1 - Version Control with Git: 
-### Part 1
+## CA1 - Version Control with Git:
 
-##Table of Contents
+## Table of Contents
 
 - [Introduction](#introduction)
 - [Environment Setup](#environment-setup)
 - [Part 1: Development Without Branches](#part-1-development-without-branches)
-    - [Goals and Requirements](#goals-and-requirements)
-    - [Key Developments](#key-developments)
+  - [Goals and Requirements](#goals-and-requirements)
+  - [Development](#Development)
 - [Conclusion](#conclusion)
+- [Part 2: Development With Branches](#part-2-development-with-branches)
+  - [Goals and Requirements](#goals-and-requirements)
+  - [Development](#Development)
+
 
 ## Introduction
-- This technical report was created with the purpose of providing a detailed  assignment for the DevOps course. 
-The assignment is divided into two parts: **Part 1**, utilizing version control with Git without branches, and **Part 2**, 
-where I implement branching. The conclusion contemplates the results obtained throughout the 
-full process.
+- This technical report was created with the purpose of providing a detailed  assignment for the DevOps course.
+  The assignment is divided into two parts: **Part 1**, utilizing version control with Git without branches, and **Part 2**,
+  where I implement branching. The conclusion contemplates the results obtained throughout the
+  full process.
 
 ## Environment Setup
 
@@ -36,7 +39,7 @@ git init
 cp -r ~/Switch/II/DevOps/tut ~/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906
 ```
 
-**Connecting to GitHub:** I created a remote repository on Github and then connected my local one to it. This connection 
+**Connecting to GitHub:** I created a remote repository on Github and then connected my local one to it. This connection
 makes it possible to upload our changes and updates to the newly created remote repository.
 ```Terminal
 git remote add origin <repository-URL>
@@ -52,15 +55,15 @@ git push
 ```
 
 At this point I tried some git commands, like the fetch/log/revert for experimenting, so that I could have a clear understanding
-of what happens with each one of them. By the end of it I had to revert to an initial phase so that the README.md file could be 
-accessed once again. 
+of what happens with each one of them. By the end of it I had to revert to an initial phase so that the README.md file could be
+accessed once again.
 
 ```Terminal
 git revert e411b44
 git push
 ```
 
-## Part 1: Development Without Branches
+## Part 1 - Development Without Branches
 
 ### Goals and Requirements
 -   Basic version control operations without branching (Master branch only).
@@ -69,10 +72,10 @@ git push
 
 ### Development
 
-1. **Recursively copied the code contained inside the basic folder in Tutorial React.js and Spring Data REST Application
-into a new folder named `CA1`. I use the `-p` command to create `part1` inside the newly created folder and copied the 
-original `pom.xml` file from the full application to the `part1` folder. I also removed `.gitignore` from the newly imported
-file and created a new one in gitignore.io with the following: `react, maven, gradle, node, intellij, java`.**
+1.1 **Recursively copied the code contained inside the basic folder in Tutorial React.js and Spring Data REST Application
+   into a new folder named `CA1`. I use the `-p` command to create `part1` inside the newly created folder and copied the
+   original `pom.xml` file from the full application to the `part1` folder. I also removed `.gitignore` from the newly imported
+   file and created a new one in gitignore.io with the following: `react, maven, gradle, node, intellij, java`.**
 
 ```Terminal
 mkdir -p ~/devops-24-25-1241906/CA1/part1
@@ -81,7 +84,8 @@ cd ~/devops-24-25-1241906/CA1/basic
 rm .gitignore
 cp ~/devops-24-25-1241906/tut/pom.xml ~/devops-24-25-1241906/CA1/part1
 ```
-2. **Commit & Push.**
+
+1.2 **Commit & Push.**
 
 ```Terminal
 git add .
@@ -89,7 +93,7 @@ git commit -m "Added basic folder to CA1/part1."
 git push
 ```
 
-3. **Tagging.**
+1.3 **Tagging.**
 
 I tagged the initial setup as `v1.1.0` and subsequently pushed this tag to the remote repository:
 
@@ -97,7 +101,7 @@ I tagged the initial setup as `v1.1.0` and subsequently pushed this tag to the r
 git tag -a v1.1.0 -m "Initial version 1.1.0"
 git push origin v1.1.0
 ```
-4. **New Feature along with Issues.**
+1.4 **New Feature along with Issues.**
 
 - **Issues**: Created some issues for the initial phase of the assignment development:
 ```Terminal
@@ -108,8 +112,8 @@ gh issue create --title "Update app.js with jobYears."
 ```
 
 - **Employee.java**: Added a new integer field named `jobYears`, which should be an `int`.
-I added this attribute, along with its getter and setter methods to allow for data encapsulation, 
-aswell as validators for all parameters. 
+  I added this attribute, along with its getter and setter methods to allow for data encapsulation,
+  aswell as validators for all parameters.
 - Below are the key updates made to the `Employee` Class:
 
 ```java
@@ -293,9 +297,9 @@ class EmployeeTest {
   }
 }
 ```
-- **DatabaseLoader.java**: 
-Updated this file to include the `jobYears` and new insertions. This process would make sure that
-the application could run without errors. Below is the updated code for it:
+- **DatabaseLoader.java**:
+  Updated this file to include the `jobYears` and new insertions. This process would make sure that
+  the application could run without errors. Below is the updated code for it:
 
 ```java
 public class DatabaseLoader implements CommandLineRunner { // <2>
@@ -315,7 +319,7 @@ public class DatabaseLoader implements CommandLineRunner { // <2>
 ```
 
 - **app.js**: Modified `app.js` to display `jobYears` in the employee list. The table provided when checking the
-`http://localhost:8080/` now properly employs the column for jobYears table:
+  `http://localhost:8080/` now properly employs the column for jobYears table:
 
 ```javascript
 class EmployeeList extends React.Component{
@@ -355,18 +359,171 @@ class Employee extends React.Component{
 }
 ```
 
-5. **Debugging.**
+1.5 **Debugging.**
 
 After testing the integration of `jobYears` inside the application I ran the command
 `./mvnw spring-boot:run` and then verified `http://localhost:8080/`. This made sure that all the updates
 and changes were properly applied. I tried changing the input fields multiple times to check for any
-possible errors or bugs, although none was found. The following tags were created after the integrity of 
-code was confirmed:
+possible errors or bugs, although none was found.
+
+
+1.6 **Conclusion.**
+
+T----------------------------------
+
+The following tags were created after the integrity of the code was confirmed:
 
 ```Terminal
 git tag -a v1.2.0 -m "ca1-part1.1"
 git push origin v1.2.0
 ```
+
+## Part 2 - Development With Branches
+
+### Goals and Requirements
+-   On the second part I had to employ branching on the assignment so that I could create other branches
+    for developing before implementing the code into the main branch. The testing and debugging of the code
+    should therefore occur in these branches before merging them to the main branch. The utilization of
+    version control branching should be verifiable by the end of the development.
+
+### Development
+
+During this step I had to deploy new branches for each assignment, in order to test and debug in them,
+so that the main branch remained stable, so that afterwards there could be a merge of the branch to
+the main one.
+
+1.1 **Develop new features in branches**
+
+I utilized the `git branch` command followed by `email-field` so that a new branch was created.
+I then switched to that branch with `git checkout email-field`, so that all changes in my code
+would be developed in it and not the main one, diverging from its timeline. I confirmed the switch
+again by running the same command as initially:
+
+```Terminal
+git branch email-field
+git checkout email-field
+git branch
+```
+1.2 **Creation of Issues**
+
+I switched back to the main branch for the creation multiple issues for the developing process:
+
+```Terminal
+git checkout main
+gh issue create --title "Create email field."
+gh issue create --title "Create Unit Tests for Employee and validate its attributes."
+gh issue create --title "Update the README.md file for Part 2."
+gh issue create --title "Update necessary files."
+gh issue create --title "Debug server and client."
+gh issue create --title "Merge with main and create new tag."
+gh issue create --title "Create new branch (fix-invalid-email)."
+gh issue create --title "Debug fix-invalid-email branch."
+gh issue create --title "Merge fix-invalid-email into main and tag."
+```
+
+1.3 **Deploying email field**
+The addition of the `email` field was very similar to the implementation of `jobYears`. I switched
+to the `email-field` branch and proceeded to add the email field to `Employee`. Its validation
+was more demanding than `jobYears`. I created the getter and setter for it and then updated the app.js
+and DatabaseLoader files to assure the integrity of the application. Here is a followup example of
+the validations for the `setEmail` method:
+
+```java
+public void setEmail(String email) throws IllegalArgumentException {
+		if (email == null || email.isEmpty()) {
+			throw new IllegalArgumentException("The email isn't valid.");
+		}
+		if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+			this.email = email;
+		} else {
+			throw new IllegalArgumentException("The email isn't valid.");
+		}
+	}
+```
+
+1.4 **Unit Testing**: I verified the implementation by creating unit tests for the edge cases where
+  the email field could fail (null, empty or failing the other validations). Below is an example of
+  such usage:
+
+```java
+@Test
+void shouldReturnExceptionIfInvalidEmailSetter() {
+  //Arrange
+  Employee e1 = new Employee("Joao", "Almeida", "Developer", "12345@gmail.com", 5);
+
+  //Act + Assert
+  Exception exception = assertThrows(IllegalArgumentException.class, () -> e1.setEmail("º~*`"));
+  assertEquals("The email isn't valid.", exception.getMessage());
+}
+```
+
+1.5 **Debugging**: After being tested and validated, the addition of the email field went through debugging
+  both on the client and the server side.
+
+1.6 **Merge the code with the master**
+
+Implementing the email-field feature was done in a separate branch, so after it was debugged and tested
+I had to merge it into the main branch as a new feature and with a new tag version. After the merging the changes
+were pushed to the remote repository along with it.
+
+```Terminal
+# Commit the feature changes:
+git add .
+git commit -m "Added DatabaseLoaderTest and fixes to built folder."
+
+git push 
+
+# Switch to the main branch/merge:
+git checkout main
+git merge email-field
+
+# Push to the main branch:
+git push
+
+# Tag:
+git tag -a v1.3.0 -m "Email-field implementation."
+git push origin v1.3.0
+```
+
+2. **Create a new branch to fix invalid email**
+
+To fix the bug in the `Employee` class, a branch called `fix-invalid-email` was created.
+Its implementation followed the logic presented at the email-field implementation. In this scenario
+we had to guarantee that the email had to contain an `@` so the email setter within
+`Employee` had to be upgraded:
+
+```java
+public void setEmail(String email) throws IllegalArgumentException {
+    if (email == null || email.isEmpty()) {
+        throw new IllegalArgumentException("The email can't be null or empty.");
+    }
+    if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+        this.email = email;
+    } else {
+        throw new IllegalArgumentException("The email isn't valid.");
+    }
+}
+```
+
+2.1 **End of assignment**
+
+After careful implementation and consequent debug, the updates were merged into the master branch,
+and the application version was updated to `v1.3.1`. After this process I tagged this version of the 
+repository with `ca1-part1.2`.
+
+## Final Results
+
+### Implementation
+Final result:
+![enter image description here](https://i.postimg.cc/ZR3g53z8/Screenshot-2025-03-16-171747.png)
+We began by creating the jobYears field at the initial phase of the assignment, followed by
+the addition of the Email field. These two new features both had getters and setters created, aswell
+as the remaining three fields, which also had their setters upgraded and tested.
+
+
+
+
+
 
 
 
