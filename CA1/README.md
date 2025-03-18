@@ -659,3 +659,72 @@ rm .gitignore
 cp -r .\gradle_basic_demo\* C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part2\
 ```
 
+2.2 **Fixing/Building Application**
+
+I had to change the SDK version in the Project Structure settings to `corretto-17` so that the build would be successful.
+I read the documentation inside readme.md and proceeded to run 3 different commands on 3 terminals:
+
+1. Build the .jar file:
+
+```Terminal
+./gradlew build 
+```
+
+2. Run the server:
+
+```Terminal
+java -cp build/libs/basic_demo-0.1.0.jar basic_demo.ChatServerApp 59001
+```
+
+3. Run the client:
+
+```Terminal
+./gradlew runClient
+```
+
+A small chat window appeared when I ran the client and I was also able to read that someone 
+had joined it through the Server terminal window.
+
+2.3 **Creating runServer task**
+
+The creation of a runServer was necessary to automatize its functioning, so inside `build.gradle`
+the following task was created, following the runClient example one:
+
+```java
+task runServer(type:JavaExec, dependsOn:classes){
+    group = "DevOps"
+    description = "Launches a server with the following port: <59001> "
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    mainClass = 'basic_demo.ChatServerApp'
+
+    args 'localhost', '59001'
+}
+```
+
+2.4 **Unit Test**
+
+Regarding the required tests for the application, the following folder was created
+and marked as a test folder through the Open Modules Settings: `src/test/java` so that when we generate tests they are
+directly inserted in it. I also had to insert the `junit 4.12` dependency into the `build.gradle` file
+so that the tests would run:
+
+```java
+testImplementation 'junit:junit:4.12'
+```
+
+After this step I ran the command the test ran, achieving the following result:
+
+```Terminal
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava UP-TO-DATE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test
+BUILD SUCCESSFUL in 539ms
+4 actionable tasks: 1 executed, 3 up-to-date
+5:29:06 PM: Execution finished ':test --tests "basic_demo.AppTest.testAppHasAGreeting"'.
+```
