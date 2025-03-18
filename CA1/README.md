@@ -12,13 +12,16 @@
 
 - [Introduction](#introduction)
 - [Environment Setup](#environment-setup)
-- [Part 1: Development Without Branches](#part-1-development-without-branches)
-  - [Goals and Requirements](#goals-and-requirements)
+- [Part 1.1: Development Without Branches](#part-1-development-without-branches)
+  - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
-- [Part 2: Development With Branches](#part-2-development-with-branches)
-  - [Goals and Requirements](#goals-and-requirements)
+- [Part 1.2: Development With Branches](#part-2-development-with-branches)
+  - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
   - [Alternative Implementation](#Alternative-Implementation)
+- [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with_Gradle)
+  - [Goals/Requirements](#goals-and-requirements)
+  - [Development](#Development)
 
 
 ## Introduction
@@ -63,12 +66,12 @@ git revert e411b44
 git push
 ```
 
-## Part 1 - Development Without Branches
+## Part 1.1 - Development Without Branches
 
 ### Goals and Requirements
 -   Basic version control operations without branching (Master branch only).
 -   New features introduction (i.e. `jobYears`).
-- Version Tagging.
+-   Version Tagging.
 
 ### Development
 
@@ -376,7 +379,7 @@ git tag -a v1.2.0 -m "ca1-part1.1"
 git push origin v1.2.0
 ```
 
-## Part 2 - Development With Branches
+## Part 1.2 - Development With Branches
 
 ### Goals and Requirements
 -   On the second part I had to employ branching on the assignment so that I could create other branches
@@ -618,3 +621,41 @@ Mark the repository with the tag ca1-part1.2 at the end of the assignment.
 ```Terminal
 svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/tags/ca1-part1.2 -m "Tagging final version ca1-part1.2"
 ```
+
+## Part 2 - Build Tools with Gradle
+
+### Goals and Requirements
+- Downloading example application for a new folder called `part 2` inside `CA1` and removing `.gitignore`.
+- Add a new task to execute the server.
+- Add simple unit test/update gradle script, also adding junit 4.12 dependency.
+- Add a new task of type `Copy` (copy `src` folder to a new `backup` folder).
+- Add a new task of type `Zip` (copy the contents of `src` folder to a new `zip` folder).
+
+### Development
+
+2.1 **Importing the Application**
+
+I began by opening some issues with some of the objectives that are fundamental steps to accomplish on the assignment.
+
+```Terminal
+gh issue create --title "Import the application and copy it inside a new CA1/part2 folder."
+gh issue create --title "readme.md file and experiment with the application."
+gh issue create --title "Add a task to execute the server."
+gh issue create --title "Add a simple unit test."
+gh issue create --title "Upgrade the Gradle script to execute the test." --body "Add junit 4.12 dependency."
+gh issue create --title "Add a task of type Copy (copy src contents to a new backup folder)."
+gh issue create --title "Add a task of type Zip (copy src contents to a new zip file)."
+```
+
+I started by creating a new folder inside `CA1` called `part2`for this part of the assignment,
+and also importing the tutorial to the `devops` folder, removing the .gitignore from it. After this process
+I copied the application into `part2`.
+
+```Terminal
+mkdir CA1/part2
+git clone https://bitbucket.org/pssmatos/gradle_basic_demo.git ~/devops-24-25-1241906/
+cd devops-24-25-1241906\gradle_basic_demo
+rm .gitignore
+cp -r .\gradle_basic_demo\* C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part2\
+```
+

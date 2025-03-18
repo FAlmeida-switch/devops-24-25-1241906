@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/part1/basic/.mvn/.mvn.iml" filepath="$PROJECT_DIR$/part1/basic/.mvn/.mvn.iml" />
       <module fileurl="file://$PROJECT_DIR$/part1/.mvn/.mvn2.iml" filepath="$PROJECT_DIR$/part1/.mvn/.mvn2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/CA1.iml" filepath="$PROJECT_DIR$/.idea/CA1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/part1/basic/src/basic.iml" filepath="$PROJECT_DIR$/part1/basic/src/basic.iml" />
     </modules>
   </component>
 </project>
