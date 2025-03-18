@@ -27,6 +27,7 @@ dependencies {
     // Use Apache Log4J for logging
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    testImplementation 'junit:junit:4.12'
 }
  
 
@@ -48,6 +49,16 @@ jar {
 }
 
 
+task runServer(type:JavaExec, dependsOn: classes){
+    group = "DevOps"
+    description = "Launches a server with the following port: <59001> "
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    mainClass = 'basic_demo.ChatServerApp'
+
+    args 'localhost', '59001'
+}
 
 task runClient(type:JavaExec, dependsOn: classes){
     group = "DevOps"
