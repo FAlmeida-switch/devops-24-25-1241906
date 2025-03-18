@@ -15,10 +15,10 @@
 - [Part 1: Development Without Branches](#part-1-development-without-branches)
   - [Goals and Requirements](#goals-and-requirements)
   - [Development](#Development)
-- [Conclusion](#conclusion)
 - [Part 2: Development With Branches](#part-2-development-with-branches)
   - [Goals and Requirements](#goals-and-requirements)
   - [Development](#Development)
+  - [Alternative Implementation](#Alternative-Implementation)
 
 
 ## Introduction
@@ -367,9 +367,7 @@ and changes were properly applied. I tried changing the input fields multiple ti
 possible errors or bugs, although none was found.
 
 
-1.6 **Conclusion.**
-
-T----------------------------------
+1.6 **Tagging.**
 
 The following tags were created after the integrity of the code was confirmed:
 
@@ -511,19 +509,112 @@ After careful implementation and consequent debug, the updates were merged into 
 and the application version was updated to `v1.3.1`. After this process I tagged this version of the 
 repository with `ca1-part1.2`.
 
-## Final Results
+### Final Results
 
-### Implementation
-Final result:
 ![enter image description here](https://i.postimg.cc/ZR3g53z8/Screenshot-2025-03-16-171747.png)
-We began by creating the jobYears field at the initial phase of the assignment, followed by
+I began by creating the jobYears field at the initial phase of the assignment, followed by
 the addition of the Email field. These two new features both had getters and setters created, aswell
-as the remaining three fields, which also had their setters upgraded and tested.
+as the remaining three fields, which were thoroughly upgraded and tested.
 
+### Alternative Implementation
 
+For this part of the assignment, I explored an alternative version control system: 
+Apache Subversion (SVN). Below, I present a comparison between SVN and Git, 
+and how SVN could be used to achieve the same goals as the required.
 
+**Comparison of SVN and Git**
 
+1. **Version Control Features**:
 
+- Centralized vs. Distributed:  Git is distributed, with each user having a complete copy. SVN has a single central repository.
+- Branching and Merging: Git is better at managing multiple lines of development. SVN is less flexible and more complex.
+- Performance: Git is faster, especially for committing and branching, because it operates locally.
+- History and Snapshots: Git stores snapshots of the project. SVN stores differences between versions (deltas).
 
+2. **Using SVN for the Assignment**:
 
+- Stable Versions: Use the master directory for stable versions.
+- Feature Development: Create branches for new features (e.g., email-field).
+- Bug Fixes: Create branches for bug fixes (e.g., fix-invalid-email).
+- Merging and Tagging: Merge branches back into trunk and create tags for new versions.
 
+**Creating a Repository**:
+
+Open PowerShell as Administrator.
+Navigate to the repository folder.
+Run the following command:
+
+```Terminal
+svnadmin create C:\Users\Franc\Documents\svn-repo
+```
+
+**Import Initial Project**:
+Navigate to project directory and run the following command
+to import the project into the repository:
+
+```Terminal
+svn import C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1 file:///C:/Users/Franc/Documents/svn-repo -m "Initial import"
+```
+
+**Checkout the Repository**:
+Create a working copy by checking out the repository:
+
+```Terminal
+svn checkout file:///C:/Users/Franc/Documents/svn-repo C:\Users\Franc\Documents\working-copy
+```
+
+Using SVN for the Assignment
+Now that you have your repository set up, you can proceed with the commands for
+creating branches, merging, and tagging:
+
+### Create a branch for the email field feature
+
+```Terminal
+svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/branches/email-field -m "Creating branch for email field feature"
+```
+
+**Create a branch for fixing invalid email bug**:
+```Terminal
+svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/branches/fix-invalid-email -m "Creating branch for fixing invalid email bug"
+```
+
+**Adding Support for the Email Field**:
+Implement the email field in the email-field branch. Add unit tests for the email field validation.
+
+**Debugging and Testing**:
+Debug and test the server and client parts of the solution in the respective branches.
+
+**Merging and Tagging**:
+Merge the email-field branch back into master
+
+```Terminal
+svn merge --reintegrate file:///C:/Users/Franc/Documents/svn-repo/branches/email-field
+svn commit -m "Merging email-field feature into trunk"
+```
+
+**Tag the new version:**
+
+```Terminal
+svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/tags/v1.3.0 -m "Tagging version 1.3.0"
+```
+
+**Merge the fix-invalid-email branch back into the trunk:**
+
+```Terminal
+svn merge --reintegrate file:///C:/Users/Franc/Documents/svn-repo/branches/fix-invalid-email
+svn commit -m "Merging fix-invalid-email bug fix into trunk"
+```
+
+**Tag the new version:**
+
+```Terminal
+svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/tags/v1.3.1 -m "Tagging version 1.3.1"
+```
+
+**Final Tag:**
+
+Mark the repository with the tag ca1-part1.2 at the end of the assignment.
+
+```Terminal
+svn copy file:///C:/Users/Franc/Documents/svn-repo/trunk file:///C:/Users/Franc/Documents/svn-repo/tags/ca1-part1.2 -m "Tagging final version ca1-part1.2"
+```
