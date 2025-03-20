@@ -70,3 +70,20 @@ task runClient(type:JavaExec, dependsOn: classes){
 
     args 'localhost', '59001'
 }
+
+task copySources(type: Copy) {
+    group = "DevOps"
+    description = "Copies the source files into a backup folder"
+
+    from 'src'
+    into 'backup'
+}
+
+task zipSources(type: Zip) {
+    group = "DevOps"
+    description = "Zips the source files into a zip file"
+
+    from 'src'
+    archiveFileName = 'src.zip'
+    destinationDirectory = file('backup')
+}
