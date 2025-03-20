@@ -7,26 +7,9 @@
     <list default="true" id="e14e3b30-197f-4bc4-87bf-cbabebb992e8" name="Changes" comment="Added EmployeeTest.">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/basic_demo.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/basic_demo.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/basic/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/part1/basic/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/7.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/7.4.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/7.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/7.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/7.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/part2/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/part2/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatClient$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatClient$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatServer$Handler.class" beforeDir="false" afterPath="$PROJECT_DIR$/part2/build/classes/java/main/basic_demo/ChatServer$Handler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/part2/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,78 +64,78 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Downloaded.Files.Path.Enabled": "true",
-    "Gradle.AppTest.executor": "Run",
-    "Gradle.AppTest.testAppHasAGreeting.executor": "Run",
-    "Gradle.Build part2.executor": "Run",
-    "Gradle.part2 [:basic_demo.App.main()].executor": "Run",
-    "JUnit.All in .mvn.executor": "Run",
-    "JUnit.All in react-and-spring-data-rest-basic.executor": "Run",
-    "JUnit.All in react-and-spring-data-rest.executor": "Run",
-    "JUnit.AppTest.testAppHasAGreeting.executor": "Run",
-    "JUnit.DatabaseLoaderTest.executor": "Coverage",
-    "JUnit.DatabaseLoaderTest.run_shouldSaveEmployee.executor": "Run",
-    "JUnit.EmployeeTest.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldCreateEmployeeUsingProtectedConstructor.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldCreateValidEmployee.executor": "Run",
-    "JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest.executor": "Run",
-    "JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters.executor": "Run",
-    "JUnit.EmployeeTest.shouldReturnExceptionIfInvalidEmailSetter.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnExceptionInFirstNameEmptySetter.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnExceptionInFirstNameSetter.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnExceptionInIdSetter.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseForDifferentDescription.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseForDifferentId.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseForDifferentLastName.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseForNonEqualObjects.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnFalseWhenComparedToNull.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnTrueForEqualObjects.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnTrueIfEqualsOverrideIsVerified.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldReturnValuesFromGetters.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldSetCorrectValuesFirstNameSetter.executor": "Run",
-    "JUnit.EmployeeTest.shouldSetCorrectValuesIdSetter.executor": "Coverage",
-    "JUnit.EmployeeTest.shouldSetCorrectValuesOnSetters.executor": "Run",
-    "JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs.executor": "Run",
-    "JUnit.EmployeeTest.shouldThrowExceptionWithEmptyConstructorArguments.executor": "Run",
-    "JUnit.EmployeeTest.shouldThrowExceptionWithInvalidConstructorArguments.executor": "Run",
-    "JUnit.EmployeeTest.shouldThrowExceptionWithNullConstructorArguments.executor": "Coverage",
-    "JUnit.EmployeeTest.testToString.executor": "Coverage",
-    "Node.js.app.js.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ReactAndSpringDataRestApplication.executor": "Run",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "create.test.in.the.same.root": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Franc/OneDrive/Documents/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906/CA1/part1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "MavenSettings",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Gradle.AppTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AppTest.testAppHasAGreeting.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build part2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.part2 [:basic_demo.App.main()].executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in .mvn.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in react-and-spring-data-rest-basic.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in react-and-spring-data-rest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AppTest.testAppHasAGreeting.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DatabaseLoaderTest.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.DatabaseLoaderTest.run_shouldSaveEmployee.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldCreateEmployeeUsingProtectedConstructor.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldCreateValidEmployee.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldFail_setId_IfFirstNameNullTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnCorrectValuesFromGetters.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnExceptionIfInvalidEmailSetter.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnExceptionInFirstNameEmptySetter.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnExceptionInFirstNameSetter.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnExceptionInIdSetter.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseForDifferentDescription.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseForDifferentId.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseForDifferentLastName.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseForNonEqualObjects.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseWhenComparedToDifferentClass.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnFalseWhenComparedToNull.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnTrueForEqualObjects.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnTrueIfEqualsOverrideIsVerified.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldReturnValuesFromGetters.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldSetCorrectValuesFirstNameSetter.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldSetCorrectValuesIdSetter.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.shouldSetCorrectValuesOnSetters.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithDifferentInvalidInputs.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithEmptyConstructorArguments.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithInvalidConstructorArguments.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EmployeeTest.shouldThrowExceptionWithNullConstructorArguments.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.EmployeeTest.testToString.executor&quot;: &quot;Coverage&quot;,
+    &quot;Node.js.app.js.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ReactAndSpringDataRestApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Franc/OneDrive/Documents/Switch/II/DevOps/DevOpsRepo/devops-24-25-1241906/CA1/part2/src/test/java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part1" />
@@ -169,7 +152,7 @@
       <recent name="com.greglturnquist.payroll" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AppTest.testAppHasAGreeting">
+  <component name="RunManager" selected="Gradle.AppTest.testAppHasAGreeting">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="basic_demo.App" />
       <module name="basic_demo.main" />
@@ -272,10 +255,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.AppTest.testAppHasAGreeting" />
         <item itemvalue="JUnit.AppTest.testAppHasAGreeting" />
         <item itemvalue="Application.App" />
         <item itemvalue="Gradle.AppTest" />
-        <item itemvalue="Gradle.AppTest.testAppHasAGreeting" />
         <item itemvalue="JUnit.DatabaseLoaderTest" />
       </list>
     </recent_temporary>
@@ -318,6 +301,7 @@
       <workItem from="1742144249544" duration="1632000" />
       <workItem from="1742207606083" duration="606000" />
       <workItem from="1742208867948" duration="318000" />
+      <workItem from="1742395395592" duration="598000" />
     </task>
     <task id="LOCAL-00001" summary="Added jobYears attribute alongside it's setter and getter.">
       <option name="closed" value="true" />
