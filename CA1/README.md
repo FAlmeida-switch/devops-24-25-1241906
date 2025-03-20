@@ -18,6 +18,7 @@
 - [Part 1.2: Development With Branches](#part-2-development-with-branches)
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
+  - [Final Results](#Filan-Results)
   - [Alternative Implementation](#Alternative-Implementation)
 - [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with_Gradle)
   - [Goals/Requirements](#goals-and-requirements)
@@ -75,7 +76,7 @@ git push
 
 ### Development
 
-1.1 **Recursively copied the code contained inside the basic folder in Tutorial React.js and Spring Data REST Application
+Recursively copied the code contained inside the basic folder in Tutorial React.js and Spring Data REST Application
    into a new folder named `CA1`. I use the `-p` command to create `part1` inside the newly created folder and copied the
    original `pom.xml` file from the full application to the `part1` folder. I also removed `.gitignore` from the newly imported
    file and created a new one in gitignore.io with the following: `react, maven, gradle, node, intellij, java`.**
@@ -88,7 +89,7 @@ rm .gitignore
 cp ~/devops-24-25-1241906/tut/pom.xml ~/devops-24-25-1241906/CA1/part1
 ```
 
-1.2 **Commit & Push.**
+**Commit & Push.**
 
 ```Terminal
 git add .
@@ -96,7 +97,7 @@ git commit -m "Added basic folder to CA1/part1."
 git push
 ```
 
-1.3 **Tagging.**
+**Tagging.**
 
 I tagged the initial setup as `v1.1.0` and subsequently pushed this tag to the remote repository:
 
@@ -104,7 +105,7 @@ I tagged the initial setup as `v1.1.0` and subsequently pushed this tag to the r
 git tag -a v1.1.0 -m "Initial version 1.1.0"
 git push origin v1.1.0
 ```
-1.4 **New Feature along with Issues.**
+**New Feature along with Issues.**
 
 - **Issues**: Created some issues for the initial phase of the assignment development:
 ```Terminal
@@ -362,7 +363,7 @@ class Employee extends React.Component{
 }
 ```
 
-1.5 **Debugging.**
+**Debugging.**
 
 After testing the integration of `jobYears` inside the application I ran the command
 `./mvnw spring-boot:run` and then verified `http://localhost:8080/`. This made sure that all the updates
@@ -370,7 +371,7 @@ and changes were properly applied. I tried changing the input fields multiple ti
 possible errors or bugs, although none was found.
 
 
-1.6 **Tagging.**
+**Tagging.**
 
 The following tags were created after the integrity of the code was confirmed:
 
@@ -382,10 +383,10 @@ git push origin v1.2.0
 ## Part 1.2 - Development With Branches
 
 ### Goals and Requirements
--   On the second part I had to employ branching on the assignment so that I could create other branches
-    for developing before implementing the code into the main branch. The testing and debugging of the code
-    should therefore occur in these branches before merging them to the main branch. The utilization of
-    version control branching should be verifiable by the end of the development.
+On the second part I had to employ branching on the assignment so that I could create other branches
+for developing before implementing the code into the main branch. The testing and debugging of the code
+should therefore occur in these branches before merging them to the main branch. The utilization of
+version control branching should be verifiable by the end of the development.
 
 ### Development
 
@@ -393,7 +394,7 @@ During this step I had to deploy new branches for each assignment, in order to t
 so that the main branch remained stable, so that afterwards there could be a merge of the branch to
 the main one.
 
-1.1 **Develop new features in branches**
+**Develop new features in branches**
 
 I utilized the `git branch` command followed by `email-field` so that a new branch was created.
 I then switched to that branch with `git checkout email-field`, so that all changes in my code
@@ -405,7 +406,7 @@ git branch email-field
 git checkout email-field
 git branch
 ```
-1.2 **Creation of Issues**
+**Creation of Issues**
 
 I switched back to the main branch for the creation multiple issues for the developing process:
 
@@ -422,7 +423,7 @@ gh issue create --title "Debug fix-invalid-email branch."
 gh issue create --title "Merge fix-invalid-email into main and tag."
 ```
 
-1.3 **Deploying email field**
+**Deploying email field**
 The addition of the `email` field was very similar to the implementation of `jobYears`. I switched
 to the `email-field` branch and proceeded to add the email field to `Employee`. Its validation
 was more demanding than `jobYears`. I created the getter and setter for it and then updated the app.js
@@ -442,7 +443,7 @@ public void setEmail(String email) throws IllegalArgumentException {
 	}
 ```
 
-1.4 **Unit Testing**: I verified the implementation by creating unit tests for the edge cases where
+**Unit Testing**: I verified the implementation by creating unit tests for the edge cases where
   the email field could fail (null, empty or failing the other validations). Below is an example of
   such usage:
 
@@ -458,10 +459,10 @@ void shouldReturnExceptionIfInvalidEmailSetter() {
 }
 ```
 
-1.5 **Debugging**: After being tested and validated, the addition of the email field went through debugging
+**Debugging**: After being tested and validated, the addition of the email field went through debugging
   both on the client and the server side.
 
-1.6 **Merge the code with the master**
+**Merge the code with the master**
 
 Implementing the email-field feature was done in a separate branch, so after it was debugged and tested
 I had to merge it into the main branch as a new feature and with a new tag version. After the merging the changes
@@ -486,7 +487,7 @@ git tag -a v1.3.0 -m "Email-field implementation."
 git push origin v1.3.0
 ```
 
-2. **Create a new branch to fix invalid email**
+**Create a new branch to fix invalid email**
 
 To fix the bug in the `Employee` class, a branch called `fix-invalid-email` was created.
 Its implementation followed the logic presented at the email-field implementation. In this scenario
@@ -506,7 +507,7 @@ public void setEmail(String email) throws IllegalArgumentException {
 }
 ```
 
-2.1 **End of assignment**
+**End of assignment**
 
 After careful implementation and consequent debug, the updates were merged into the master branch,
 and the application version was updated to `v1.3.1`. After this process I tagged this version of the 
@@ -514,7 +515,7 @@ repository with `ca1-part1.2`.
 
 ### Final Results
 
-![enter image description here](https://i.postimg.cc/ZR3g53z8/Screenshot-2025-03-16-171747.png)
+![Browser result on http://localhost:8080](https://i.postimg.cc/ZR3g53z8/Screenshot-2025-03-16-171747.png)
 I began by creating the jobYears field at the initial phase of the assignment, followed by
 the addition of the Email field. These two new features both had getters and setters created, aswell
 as the remaining three fields, which were thoroughly upgraded and tested.
@@ -687,8 +688,8 @@ had joined it through the Server terminal window.
 
 2.3 **Creating runServer task**
 
-The creation of a runServer was necessary to automatize its functioning, so inside `build.gradle`
-the following task was created, following the runClient example one:
+The creation of a runServer was necessary to automatize its functioning, therefore, inside `build.gradle`,
+the following task was created, following the runClient example:
 
 ```java
 task runServer(type:JavaExec, dependsOn:classes){
@@ -705,16 +706,31 @@ task runServer(type:JavaExec, dependsOn:classes){
 
 2.4 **Unit Test**
 
-Regarding the required tests for the application, the following folder was created
-and marked as a test folder through the Open Modules Settings: `src/test/java` so that when we generate tests they are
-directly inserted in it. I also had to insert the `junit 4.12` dependency into the `build.gradle` file
-so that the tests would run:
+Regarding the required simple unit test for the application, the following folder was created
+and marked as a test folder through the Open Modules Settings inside intelliJ: `src/test/java` so that 
+when we generate tests they are directly inserted in it. I also had to insert the `junit 4.12` dependency 
+into the `build.gradle` file so that the test would run:
 
 ```java
 testImplementation 'junit:junit:4.12'
 ```
 
-After this step I ran the command the test ran, achieving the following result:
+`AppTest`:
+
+```java
+package basic_demo;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class AppTest {
+@Test public void testAppHasAGreeting() {
+    App classUnderTest = new App();
+    assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    }
+}
+```
+
+After this step I ran test, achieving the following result:
 
 ```Terminal
 > Task :compileJava UP-TO-DATE
@@ -728,3 +744,57 @@ BUILD SUCCESSFUL in 539ms
 4 actionable tasks: 1 executed, 3 up-to-date
 5:29:06 PM: Execution finished ':test --tests "basic_demo.AppTest.testAppHasAGreeting"'.
 ```
+
+2.5 **Add a new task of type Copy**
+
+For this part of the assignment I opened `build.gradle` and added the following lines of code:
+
+```java
+task copySources(type: Copy) {
+    group = "DevOps"
+    description = "Copies the source files into a backup folder"
+
+    from 'src'
+    into 'backup'
+}
+```
+
+I had to create a new folder inside `CA1/part2` called backup so that the task would run
+without errors, thus copying the files from src into it. This was done in order to protect
+any future damage to the src folder, maintaining a safe copy from it at the time.
+
+2.6 **Add a new task of type Zip**
+
+This part follows the example of the Copy one above, for zipping the files in `src` into a 
+new zipped file:
+
+```java
+task zipSources(type: Zip) {
+    group = "DevOps"
+    description = "Zips the source files into a zip file"
+
+    from 'src'
+    archiveFileName = 'src.zip'
+    destinationDirectory = file('backup')
+}
+```
+
+The resulting zipped `src.zip` was created in the destination directory `backup`,
+to maintain coherence on the backed source files, therefore organizing the project files
+in a single Zip Archive. This time I tried running the command `./gradlew zipSources` on the terminal
+for testing:
+
+[![Screenshot-2025-03-20-135824.png](https://i.postimg.cc/4ykYQwsD/Screenshot-2025-03-20-135824.png)](https://postimg.cc/LYD4HtqD)
+
+These were the results of these two previous steps of the assignment (2.5, 2.6):
+
+[![Screenshot-2025-03-20-140536.png](https://i.postimg.cc/rwWYhw17/Screenshot-2025-03-20-140536.png)](https://postimg.cc/hXDrvg30)
+
+### Final Result
+
+This part of the assignment gave me important insights on the Gradle build tool and knowledge on why 
+it is widely used among IT and other types of companies worldwide. I began by preparing my workspace with
+some changes on files and updating the different utilized versions of Java and Gradle and organizing each 
+component (tests and sources) of the project. After creating multiple issues on GitHub with the main
+proposed objectives I proceeded to create tasks, test them and creating a unit test, and it was an enlightening 
+experience utilizing Gradle.
