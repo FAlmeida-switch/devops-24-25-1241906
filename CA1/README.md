@@ -730,7 +730,7 @@ public class AppTest {
 }
 ```
 
-After this step I ran test, achieving the following result:
+After this step I ran the test, achieving the following result:
 
 ```Terminal
 > Task :compileJava UP-TO-DATE
@@ -796,5 +796,6 @@ This part of the assignment gave me important insights on the Gradle build tool 
 it is widely used among IT and other types of companies worldwide. I began by preparing my workspace with
 some changes on files and updating the different utilized versions of Java and Gradle and organizing each 
 component (tests and sources) of the project. After creating multiple issues on GitHub with the main
-proposed objectives I proceeded to create tasks, test them and creating a unit test, and it was an enlightening 
-experience utilizing Gradle.
+proposed objectives I proceeded to create a unit test for one the classes and also creating tasks in Gradle,
+testing and running them with positive results. Overall, it was an engaging experience that enhanced my understanding 
+of the Gradle build tool.
