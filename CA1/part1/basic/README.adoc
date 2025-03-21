@@ -4,7 +4,8 @@
 
 Welcome, Spring community.
 
-This section shows how to get a bare-bones Spring Data REST application up and running quickly. Then it shows how to build a simple UI on top of it by using Facebook's React.js toolset.
+This section shows how to get a bare-bones Spring Data REST application up and running quickly.
+Then it shows how to build a simple UI on top of it by using Facebook's React.js toolset.
 
 == Step 0 -- Setting up Your Environment
 
@@ -17,20 +18,27 @@ If you want to do it yourself, visit https://start.spring.io and pick the follow
 * JPA
 * H2
 
-This demo uses Java 8, Maven Project, and the latest stable release of Spring Boot. It also uses React.js coded in http://es6-features.org/[ES6]. This will give you a clean, empty project. From there, you can add the various files shown explicitly in this section and/or borrow from the repository listed earlier.
+This demo uses Java 8, Maven Project, and the latest stable release of Spring Boot.
+It also uses React.js coded in http://es6-features.org/[ES6]. This will give you a clean, empty project.
+From there, you can add the various files shown explicitly in this section and/or borrow from the repository
+ listed earlier.
 
 == In the Beginning...
 
-In the beginning, there was data. And it was good. But then people wanted to access the data through various means. Over the years, people cobbled together lots of MVC controllers, many using Spring's powerful REST support. But doing over and over cost a lot of time.
+In the beginning, there was data. And it was good. But then people wanted to access the data through various means.
+ Over the years, people cobbled together lots of MVC controllers, many using Spring's powerful REST support.
+ But doing over and over cost a lot of time.
 
 Spring Data REST addresses how simple this problem can be if some assumptions are made:
 
 * The developer uses a Spring Data project that supports the repository model.
-* The system uses well accepted, industry standard protocols, such as HTTP verbs, standardized media types, and https://www.iana.org/assignments/link-relations/link-relations.xhtml[IANA-approved link names].
+* The system uses well accepted, industry standard protocols, such as HTTP verbs, standardized media types,
+and https://www.iana.org/assignments/link-relations/link-relations.xhtml[IANA-approved link names].
 
 === Declaring your domain
 
-Domain objects form the cornerstone of any Spring Data REST-based application. In this section, you will build an application to track the employees for a company. Kick that off by creating a data type, as follows:
+Domain objects form the cornerstone of any Spring Data REST-based application. In this section, you will
+build an application to track the employees for a company. Kick that off by creating a data type, as follows:
 
 .src/main/java/com/greglturnquist/payroll/Employee.java
 ====
@@ -40,12 +48,16 @@ include::src/main/java/com/greglturnquist/payroll/Employee.java[tag=code]
 ----
 
 <1> `@Entity` is a JPA annotation that denotes the whole class for storage in a relational table.
-<2> `@Id` and `@GeneratedValue` are JPA annotations to note the primary key and that is generated automatically when needed.
+<2> `@Id` and `@GeneratedValue` are JPA annotations to note the primary key and that is generated
+automatically when needed.
 ====
 
 This entity is used to track employee information -- in this case, their names and job descriptions.
 
-NOTE: Spring Data REST is not confined to JPA. It supports many NoSQL data stores, though you will not see those in this tutorial. For more information, see https://spring.io/guides/gs/accessing-neo4j-data-rest/[Accessing Neo4j Data with REST], https://spring.io/guides/gs/accessing-data-rest/[Accessing JPA Data with REST], and https://spring.io/guides/gs/accessing-mongodb-data-rest/[Accessing MongoDB Data with REST].
+NOTE: Spring Data REST is not confined to JPA. It supports many NoSQL data stores, though you will not
+see those in this tutorial. For more information, see https://spring.io/guides/gs/accessing-neo4j-data-rest
+/[Accessing Neo4j Data with REST], https://spring.io/guides/gs/accessing-data-rest/[Accessing JPA Data with REST],
+and https://spring.io/guides/gs/accessing-mongodb-data-rest/[Accessing MongoDB Data with REST].
 
 == Defining the Repository
 
@@ -58,12 +70,15 @@ Another key piece of a Spring Data REST application is a corresponding repositor
 include::src/main/java/com/greglturnquist/payroll/EmployeeRepository.java[tag=code]
 ----
 
-<1> The repository extends Spring Data Commons' `CrudRepository` and plugs in the type of the domain object and its primary key
+<1> The repository extends Spring Data Commons' `CrudRepository` and plugs in the type of the domain object
+ and its primary key
 ====
 
-That is all that is needed! In fact, you need not even annotate interface if it is top-level and visible. If you use your IDE and open up `CrudRepository`, you will find a collection of pre-defined methods.
+That is all that is needed! In fact, you need not even annotate interface if it is top-level and visible.
+If you use your IDE and open up `CrudRepository`, you will find a collection of pre-defined methods.
 
-NOTE: You can define https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.definition[your own repository] if you wish. Spring Data REST supports that as well.
+NOTE: You can define https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.definition[your own repository]
+if you wish. Spring Data REST supports that as well.
 
 == Pre-loading the Demo
 
@@ -82,13 +97,17 @@ include::src/main/java/com/greglturnquist/payroll/DatabaseLoader.java[tag=code]
 <4> The `run()` method is invoked with command line arguments, loading up your data.
 ====
 
-One of the biggest, most powerful features of Spring Data is its ability to write JPA queries for you. This not only cuts down on your development time, but it also reduces the risk of bugs and errors. Spring Data https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.details[looks at the name of methods] in a repository class and figures out the operations you need, including saving, deleting, and finding.
+One of the biggest, most powerful features of Spring Data is its ability to write JPA queries for you.
+ This not only cuts down on your development time, but it also reduces the risk of bugs and errors.
+  Spring Data https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.details[looks at the name of methods]
+   in a repository class and figures out the operations you need, including saving, deleting, and finding.
 
 That is how we can write an empty interface and inherit already built save, find, and delete operations.
 
 == Adjusting the Root URI
 
-By default, Spring Data REST hosts a root collection of links at `/`. Because you will host a web UI on that path, you need to change the root URI, as follows:
+By default, Spring Data REST hosts a root collection of links at `/`. Because you will host a web UI on that path,
+ you need to change the root URI, as follows:
 
 .src/main/resources/application.properties
 ====
@@ -99,7 +118,8 @@ include::src/main/resources/application.properties[]
 
 == Launching the Backend
 
-The last step needed to get a fully operational REST API off the ground is to write a `public static void main` method by using Spring Boot, as follows:
+The last step needed to get a fully operational REST API off the ground is to write a `public static void main`
+ method by using Spring Boot, as follows:
 
 .src/main/java/com/greglturnquist/payroll/ReactAndSpringDataRestApplication.java
 ====
@@ -109,13 +129,18 @@ include::src/main/java/com/greglturnquist/payroll/ReactAndSpringDataRestApplicat
 ----
 ====
 
-Assuming the previous class as well as your Maven build file were generated from https://start.spring.io, you can now launch it either by running that `main()` method inside your IDE or by typing `./mvnw spring-boot:run` on the command line. (`mvnw.bat` for Windows users).
+Assuming the previous class as well as your Maven build file were generated from https://start.spring.io,
+you can now launch it either by running that `main()` method inside your IDE or by typing `./mvnw spring-boot:run`
+on the command line. (`mvnw.bat` for Windows users).
 
-NOTE: If you are not up-to-date on Spring Boot and how it works, you should watch one of https://www.youtube.com/watch?v=sbPSjI4tt10[Josh Long's introductory presentations]. Did it? Press on!
+NOTE: If you are not up-to-date on Spring Boot and how it works, you should watch one of
+https://www.youtube.com/watch?v=sbPSjI4tt10[Josh Long's introductory presentations]. Did it? Press on!
 
 == Touring Your REST Service
 
-With the application running, you can check things out on the command line by using https://curl.haxx.se/[cURL] (or any other tool you like). The following command (shown with its output) lists the links in the application:
+With the application running, you can check things out on the command line by using
+https://curl.haxx.se/[cURL] (or any other tool you like). The following command (shown with its output)
+ lists the links in the application:
 
 ====
 ----
@@ -133,13 +158,16 @@ $ curl localhost:8080/api
 ----
 ====
 
-When you ping the root node, you get back a collection of links wrapped in a http://stateless.co/hal_specification.html[HAL-formatted JSON document].
+When you ping the root node, you get back a collection of links wrapped in a
+ http://stateless.co/hal_specification.html[HAL-formatted JSON document].
 
 * `_links` is the collection of available links.
 * `employees` points to an aggregate root for the employee objects defined by the `EmployeeRepository` interface.
-* `profile` is an IANA-standard relation and points to discoverable metadata about the entire service. We explore this in a later section.
+* `profile` is an IANA-standard relation and points to discoverable metadata about the entire service.
+ We explore this in a later section.
 
-You can further dig into this service by navigating the `employees` link. The following command (shown with its output) does so:
+You can further dig into this service by navigating the `employees` link. The following command (shown with its output)
+ does so:
 
 ====
 ----
@@ -163,9 +191,16 @@ $ curl localhost:8080/api/employees
 
 At this stage, you are viewing the entire collection of employees.
 
-Along with the data you pre-loaded earlier, a `_links` attribute with a `self` link is included. This is the canonical link for that particular employee. What is canonical? It means "`free of context`". For example, the same user could be fetched through `/api/orders/1/processor`, in which the employee is associated with processing a particular order. Here, there is no relationship to other entities.
+Along with the data you pre-loaded earlier, a `_links` attribute with a `self` link is included. This is
+the canonical link for that particular employee. What is canonical? It means "`free of context`". For example,
+ the same user could be fetched through `/api/orders/1/processor`, in which the employee is associated with processing
+ a particular order. Here, there is no relationship to other entities.
 
-IMPORTANT: Links are a critical facet of REST. They provide the power to navigate to related items. It makes it possible for other parties to navigate around your API without having to rewrite things every time there is a change. Updates in the client is a common problem when the clients hard-code paths to resources. Restructuring resources can cause big upheavals in code. If links are used and the navigation route is maintained, it becomes easy and flexible to make such adjustments.
+IMPORTANT: Links are a critical facet of REST. They provide the power to navigate to related items.
+It makes it possible for other parties to navigate around your API without having to rewrite things every
+time there is a change. Updates in the client is a common problem when the clients hard-code paths to resources.
+Restructuring resources can cause big upheavals in code. If links are used and the navigation route is maintained,
+ it becomes easy and flexible to make such adjustments.
 
 You can decide to view that one employee if you wish. The following command (shown with its output) does so:
 

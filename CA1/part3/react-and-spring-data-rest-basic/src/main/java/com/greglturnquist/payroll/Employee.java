@@ -1,0 +1,133 @@
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.greglturnquist.payroll;
+
+import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+// tag::code[]
+@Entity // <1>
+public class Employee {
+
+	private @Id
+	@GeneratedValue Long id; // <2>
+	private String firstName;
+	private String lastName;
+	private String description;
+	private String email;
+	private int jobYears;
+
+	protected Employee() {
+	}
+
+	public Employee(String firstName, String lastName, String description, String email, int jobYears) throws IllegalArgumentException{
+		setFirstName(firstName);
+		setLastName(lastName);
+		setDescription(description);
+		setEmail(email);
+		setJobYears(jobYears);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Employee employee = (Employee) o;
+		return Objects.equals(id, employee.id) &&
+				Objects.equals(firstName, employee.firstName) &&
+				Objects.equals(lastName, employee.lastName) &&
+				Objects.equals(description, employee.description) &&
+				Objects.equals(jobYears, employee.jobYears);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id, firstName, lastName, description);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) throws IllegalArgumentException {
+		if (id == null)
+			throw new IllegalArgumentException("The ID can't be null.");
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) throws IllegalArgumentException {
+		if (firstName == null || firstName.trim().isEmpty())
+			throw new IllegalArgumentException("The firstName can't be null or empty.");
+		this.firstName = firstName;
+	}
+
+	public String getLastName() { return lastName; }
+
+	public void setLastName(String lastName) throws IllegalArgumentException {
+		if (lastName == null || lastName.trim().isEmpty())
+			throw new IllegalArgumentException("The lastName can't be null or empty.");
+		this.lastName = lastName;
+	}
+
+	public String getDescription() { return description; }
+
+	public void setDescription(String description) throws IllegalArgumentException {
+		if (description == null || description.trim().isEmpty())
+			throw new IllegalArgumentException("The description can't be null or empty.");
+		this.description = description;
+	}
+
+	public String getEmail() { return email; }
+
+	public void setEmail(String email) throws IllegalArgumentException {
+		if (email == null || email.isEmpty()) {
+			throw new IllegalArgumentException("The email can't be null or empty.");
+		}
+		if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+			this.email = email;
+		} else {
+			throw new IllegalArgumentException("The email isn't valid.");
+		}
+	}
+
+	public int getJobYears() {return jobYears;}
+
+	public void setJobYears(int jobYears) throws IllegalArgumentException {
+		if (jobYears < 0)
+			throw new IllegalArgumentException("jobYears can't be negative.");
+		this.jobYears = jobYears;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", description='" + description + '\'' +
+				", jobYears='" + jobYears + '\'' +
+				'}';
+	}
+}
+// end::code[]

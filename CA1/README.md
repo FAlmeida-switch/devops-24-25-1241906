@@ -18,17 +18,20 @@
 - [Part 1.2: Development With Branches](#part-2-development-with-branches)
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
-  - [Final Results](#Filan-Results)
+  - [Final Results](#Final-Results)
   - [Alternative Implementation](#Alternative-Implementation)
-- [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with_Gradle)
+- [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with-Gradle)
+  - [Goals/Requirements](#goals-and-requirements)
+  - [Development](#Development)
+- [Part 3: Convert Basic Version to Gradle](#Convert-Basic-Version-to-Gradle)
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
 
-
 ## Introduction
 - This technical report was created with the purpose of providing a detailed  assignment for the DevOps course.
-  The assignment is divided into two parts: **Part 1**, utilizing version control with Git without branches, and **Part 2**,
-  where I implement branching. The conclusion contemplates the results obtained throughout the
+  The assignment is divided into three parts: **Part 1.1**, utilizing version control with Git without branches, **Part 1.2**,
+  where I implement branching and **Parts 2** and **3** where the Gradle build tool is implemented on a new demo project, but also
+  within **part 1** of the assignment. The conclusion contemplates the results obtained throughout the
   full process.
 
 ## Environment Setup
@@ -657,7 +660,7 @@ mkdir CA1/part2
 git clone https://bitbucket.org/pssmatos/gradle_basic_demo.git ~/devops-24-25-1241906/
 cd devops-24-25-1241906\gradle_basic_demo
 rm .gitignore
-cp -r .\gradle_basic_demo\* C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part2\
+cp -r .\gradle_basic_demo\* CA1\part2\
 ```
 
 2.2 **Fixing/Building Application**
@@ -799,3 +802,46 @@ component (tests and sources) of the project. After creating multiple issues on 
 proposed objectives I proceeded to create a unit test for one the classes and also creating tasks in Gradle,
 testing and running them with positive results. Overall, it was an engaging experience that enhanced my understanding 
 of the Gradle build tool.
+
+## Part 3 - Convert Basic Version to Gradle
+
+### Goals and Requirements
+- Branching. 
+- Dependencies. 
+- Basic implementation with Gradle (instead of Maven) with plugins.
+- Version Tagging.
+
+### Development
+
+I started out by creating a new branch in my main repository, called `tut-basic-gradle` (shown below) so that we could
+implement the Gradle build tool (Maven was being utilized beforehand).
+
+```Terminal
+git branch tut-basic-gradle
+git checkout tut-basic-gradle
+```
+
+**Initial Steps**:
+After branching out from the main into this newly created branch, I had to access https://start.spring.io to
+create a new Gradle Spring Boot project with these dependencies: Rest Repositories; Thymeleaf; JPA; H2. The newly
+generated zip file was consequently extracted into a new folder `CA1/part3`. 
+
+```Terminal
+cd C:\Users\Franc\Downloads
+New-Item -Path C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part3 -ItemType Directory
+Expand-Archive -Path react-and-spring-data-rest-basic.zip -DestinationPath C:\Users\Franc\OneDrive\Documents\Switch\II\DevOps\DevOpsRepo\devops-24-25-1241906\CA1\part3
+```
+
+By following the guidelines of the `README.adoc` file inside the basic folder, i ran the `./gradlew tasks` command
+inside the terminal to download the necessary files to run Gradle version 8.13 nad check all available
+tasks. I proceeded to delete the `src` folder, so that we copy the one from `part1`.
+
+```Terminal
+rm part3/react-and-spring-data-rest-basic/src
+cp -r part1/basic/src part3/react-and-spring-data-rest-basic
+```
+
+Next, I also copied `webpack.config.js` and `package.json` and deleted the 
+`src/main/resources/static/built/` folder so that it is generated from the javascript
+by the webpack tool.
+
