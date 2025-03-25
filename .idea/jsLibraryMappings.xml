@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <excludedPredefinedLibrary name="devops-24-25-1241906/CA1/part3/react-and-spring-data-rest-basic/node/lib/node_modules" />
+  </component>
+</project>
