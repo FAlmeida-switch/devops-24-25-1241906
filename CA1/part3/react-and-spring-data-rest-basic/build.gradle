@@ -37,3 +37,17 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('copyJar', Copy) {
+	dependsOn bootJar
+	from bootJar.outputs
+	into file("dist")
+}
+
+tasks.register('cleanWebpack', Delete) {
+	delete 'src/main/resources/static/built'
+}
+
+tasks.named('clean') {
+	dependsOn tasks.named('cleanWebpack')
+}
