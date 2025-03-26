@@ -23,7 +23,7 @@
 - [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with-Gradle)
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
-- [Part 3: Convert Basic Version to Gradle](#Convert-Basic-Version-to-Gradle)
+- [Part 3: Converting Basic Version to Gradle](#Converting-Basic-Version-to-Gradle)
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
 
@@ -80,9 +80,9 @@ git push
 ### Development
 
 Recursively copied the code contained inside the basic folder in Tutorial React.js and Spring Data REST Application
-   into a new folder named `CA1`. I use the `-p` command to create `part1` inside the newly created folder and copied the
-   original `pom.xml` file from the full application to the `part1` folder. I also removed `.gitignore` from the newly imported
-   file and created a new one in gitignore.io with the following: `react, maven, gradle, node, intellij, java`.**
+into a new folder named `CA1`. I use the `-p` command to create `part1` inside the newly created folder and copied the
+original `pom.xml` file from the full application to the `part1` folder. I also removed `.gitignore` from the newly imported
+file and created a new one in gitignore.io with the following: `react, maven, gradle, node, intellij, java`.**
 
 ```Terminal
 mkdir -p ~/devops-24-25-1241906/CA1/part1
@@ -447,8 +447,8 @@ public void setEmail(String email) throws IllegalArgumentException {
 ```
 
 **Unit Testing**: I verified the implementation by creating unit tests for the edge cases where
-  the email field could fail (null, empty or failing the other validations). Below is an example of
-  such usage:
+the email field could fail (null, empty or failing the other validations). Below is an example of
+such usage:
 
 ```java
 @Test
@@ -463,7 +463,7 @@ void shouldReturnExceptionIfInvalidEmailSetter() {
 ```
 
 **Debugging**: After being tested and validated, the addition of the email field went through debugging
-  both on the client and the server side.
+both on the client and the server side.
 
 **Merge the code with the master**
 
@@ -513,7 +513,7 @@ public void setEmail(String email) throws IllegalArgumentException {
 **End of assignment**
 
 After careful implementation and consequent debug, the updates were merged into the master branch,
-and the application version was updated to `v1.3.1`. After this process I tagged this version of the 
+and the application version was updated to `v1.3.1`. After this process I tagged this version of the
 repository with `ca1-part1.2`.
 
 ### Final Results
@@ -525,8 +525,8 @@ as the remaining three fields, which were thoroughly upgraded and tested.
 
 ### Alternative Implementation
 
-For this part of the assignment, I explored an alternative version control system: 
-Apache Subversion (SVN). Below, I present a comparison between SVN and Git, 
+For this part of the assignment, I explored an alternative version control system:
+Apache Subversion (SVN). Below, I present a comparison between SVN and Git,
 and how SVN could be used to achieve the same goals as the required.
 
 **Comparison of SVN and Git**
@@ -686,7 +686,7 @@ java -cp build/libs/basic_demo-0.1.0.jar basic_demo.ChatServerApp 59001
 ./gradlew runClient
 ```
 
-A small chat window appeared when I ran the client and I was also able to read that someone 
+A small chat window appeared when I ran the client and I was also able to read that someone
 had joined it through the Server terminal window.
 
 2.3 **Creating runServer task**
@@ -710,8 +710,8 @@ task runServer(type:JavaExec, dependsOn:classes){
 2.4 **Unit Test**
 
 Regarding the required simple unit test for the application, the following folder was created
-and marked as a test folder through the Open Modules Settings inside intelliJ: `src/test/java` so that 
-when we generate tests they are directly inserted in it. I also had to insert the `junit 4.12` dependency 
+and marked as a test folder through the Open Modules Settings inside intelliJ: `src/test/java` so that
+when we generate tests they are directly inserted in it. I also had to insert the `junit 4.12` dependency
 into the `build.gradle` file so that the test would run:
 
 ```java
@@ -768,7 +768,7 @@ any future damage to the src folder, maintaining a safe copy from it at the time
 
 2.6 **Add a new task of type Zip**
 
-This part follows the example of the Copy one above, for zipping the files in `src` into a 
+This part follows the example of the Copy one above, for zipping the files in `src` into a
 new zipped file:
 
 ```java
@@ -795,19 +795,19 @@ These were the results of these two previous steps of the assignment (2.5, 2.6):
 
 ### Final Result
 
-This part of the assignment gave me important insights on the Gradle build tool and knowledge on why 
+This part of the assignment gave me important insights on the Gradle build tool and knowledge on why
 it is widely used among IT and other types of companies worldwide. I began by preparing my workspace with
-some changes on files and updating the different utilized versions of Java and Gradle and organizing each 
+some changes on files and updating the different utilized versions of Java and Gradle and organizing each
 component (tests and sources) of the project. After creating multiple issues on GitHub with the main
 proposed objectives I proceeded to create a unit test for one the classes and also creating tasks in Gradle,
-testing and running them with positive results. Overall, it was an engaging experience that enhanced my understanding 
+testing and running them with positive results. Overall, it was an engaging experience that enhanced my understanding
 of the Gradle build tool.
 
-## Part 3 - Convert Basic Version to Gradle
+## Part 3 - Converting Basic Version to Gradle
 
 ### Goals and Requirements
-- Branching. 
-- Dependencies. 
+- Branching.
+- Dependencies.
 - Basic implementation with Gradle (instead of Maven) with plugins.
 - Version Tagging.
 
@@ -824,7 +824,7 @@ git checkout tut-basic-gradle
 **Initial Steps**:
 After branching out from the main into this newly created branch, I had to access https://start.spring.io to
 create a new Gradle Spring Boot project with these dependencies: Rest Repositories; Thymeleaf; JPA; H2. The newly
-generated zip file was consequently extracted into a new folder `CA1/part3`. 
+generated zip file was consequently extracted into a new folder `CA1/part3`.
 
 ```Terminal
 cd C:\Users\Franc\Downloads
@@ -841,7 +841,146 @@ rm part3/react-and-spring-data-rest-basic/src
 cp -r part1/basic/src part3/react-and-spring-data-rest-basic
 ```
 
-Next, I also copied `webpack.config.js` and `package.json` and deleted the 
+Next, I also copied `webpack.config.js` and `package.json` and deleted the
 `src/main/resources/static/built/` folder so that it is generated from the javascript
 by the webpack tool.
+
+```Terminal
+cp part1/basic/webpack.config.js part3/react-and-spring-data-rest-basic
+cp part1/basic/package.json part3/react-and-spring-data-rest-basic
+rm part3/react-and-spring-data-rest-basic/src/main/resources/static/built/
+rm -r part3/react-and-spring-data-rest-basic/src/main/resources/static/built/
+```
+
+After these steps I tried to start experimenting with the `./gradlew bootRun` command, but
+some dependencies were still needed to handle the frontend part of this phase. I downloaded
+the repository provided in the guideline, from `https://github.com/Siouan/frontend-gradle-plugin`
+into `part3`. I also copied the `.gitignore` file from the basic folder to `part3/react-and-spring-data-rest-basic`.
+
+```Terminal
+cd CA1/part3/react-and-spring-data-rest-basic
+git clone https://github.com/siouan/frontend-gradle-plugin.git
+
+```
+
+**Configuring the Plugin**
+
+To implement Gradle into the project, similar steps to part1 were taken
+in order to manage the frontend.
+After cloning the repository I added the following line to `build.gradle`
+so that it was able to handle the project's java version:
+
+```java
+id "org.siouan.frontend-jdk17" version "8.0.0"
+```
+
+The lines of code below were also added for managing the `Node.js` component
+specifying its version, but also the scripts for assembling, cleaning and checking
+the frontend:
+
+```java
+frontend {
+nodeVersion = "16.20.2",
+assembleScript = "run build",
+cleanScript = "run clean",
+checkScript = "run check"
+}
+```
+
+After these two steps I updated the object section in `package.jason`:
+
+```java
+"scripts": {
+"webpack": "webpack",
+"build": "npm run webpack",
+"check": "echo Checking frontend",
+"clean": "echo Cleaning frontend",
+"lint": "echo Linting frontend",
+"test": "echo Testing frontend"
+},
+```
+
+After trying to compile the project at this point I kept running into some errors,
+with some dependencies on the classes inside `src/main/java` so I had to update the 
+import statements from `javax.persistence` to `jakarta.persistence`.
+- I tried running `./gradlew build` and it built successfully. 
+- Next, `./gradlew bootRun` was executed and after accessing `http://localhost:8080/`, it contained
+visual elements this time, proving that it was now ready for the next step.
+
+**Gradle tasks**
+
+To streamline the handling of project files, particularly in terms of distribution
+and cleanup, two specialized Gradle tasks have been created: copyJar and cleanWebpack.
+
+1 - **Task**: copyJar
+
+**Goal**:
+The `copyJar` task is designed to transfer the `.jar` file generated by the bootJar
+task from its output location to a dist directory at the project's root. This ensures
+that the correct, fully assembled `.jar` file is used for distribution, minimizing errors
+and ensuring that deployments contain the latest build. I had to format the task to 
+a more recent Gradle's configuration API, where a task is introduced by
+"task.register", for example:
+
+```java
+tasks.register('copyJar', Copy) {
+  dependsOn bootJar
+  from bootJar.outputs
+  into file("dist")
+}
+```
+
+**Dependencies**:
+This task relies on the successful completion of the bootJar task, ensuring that the
+copy operation occurs only after the .jar file has been generated. This dependency
+maintains a clear and reliable build sequence.
+
+2 - **Task**: cleanWebpack
+
+**Goal**:
+
+The `cleanWebpack` task is responsible for removing all files generated by Webpack,
+located in the `src/main/resources/static/built` directory. This keeps the build 
+environment clean and ensures that only necessary files are included in each build,
+preventing conflicts from outdated files.
+
+**Configuration**:
+
+```java
+tasks.register('cleanWebpack', Delete) {
+  delete 'src/main/resources/static/built'
+}
+
+tasks.named('clean') {
+  dependsOn tasks.named('cleanWebpack')
+}
+```
+
+**Dependencies**:
+This task is set to run automatically before Gradle's standard clean task, integrating
+it into the regular cleanup process.
+
+**Task**: copyJar
+
+`./gradlew copyJar`
+
+**Outcome**:
+- The `.jar` file generated by the bootJar task is copied from its output directory to the `dist` folder
+located at the project's root. 
+- Ensures that the correct, fully assembled `.jar` file is used for distribution. 
+- Minimizes errors and guarantees that deployments contain 
+the most current build.
+
+**Task**: cleanWebpack
+
+`./gradlew cleanWebpack`
+
+Outcome:
+
+- All files generated by Webpack, located in the `src/main/resources/static/built` directory, are deleted.
+- Maintains a clean build environment.
+- Ensures that only necessary files are included in each build, preventing potential conflicts from stale or outdated files.
+
+
+
 
