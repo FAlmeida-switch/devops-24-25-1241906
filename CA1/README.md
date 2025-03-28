@@ -16,16 +16,17 @@
   - [Goals/Requirements](#goals-and-requirements)
   - [Development](#Development)
 - [Part 1.2: Development With Branches](#part-2-development-with-branches)
-  - [Goals/Requirements](#goals-and-requirements)
+  - [Goals/Requirements](#Goals-and-Requirements)
   - [Development](#Development)
   - [Final Results](#Final-Results)
   - [Alternative Implementation](#Alternative-Implementation)
-- [Part 2: Build Tools with Gradle](#part-2-Build-Tools-with-Gradle)
-  - [Goals/Requirements](#goals-and-requirements)
+- [Part 2: Build Tools with Gradle](#Part-2-Build-Tools-with-Gradle)
+  - [Goals/Requirements](#Goals-and-Requirements)
   - [Development](#Development)
 - [Part 3: Converting Basic Version to Gradle](#Converting-Basic-Version-to-Gradle)
-  - [Goals/Requirements](#goals-and-requirements)
+  - [Goals/Requirements](#Goals-and-Requirements)
   - [Development](#Development)
+  - [Alternative Implementation](#Alternative-Implementation)
 
 ## Introduction
 - This technical report was created with the purpose of providing a detailed  assignment for the DevOps course.
@@ -125,85 +126,85 @@ gh issue create --title "Update app.js with jobYears."
 
 ```java
 public Employee(String firstName, String lastName, String description, int jobYears) throws IllegalArgumentException{
-    setFirstName(firstName);
-    setLastName(lastName);
-    setDescription(description);
-    setJobYears(jobYears);
+  setFirstName(firstName);
+  setLastName(lastName);
+  setDescription(description);
+  setJobYears(jobYears);
 }
 
 @Override
 public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Employee employee = (Employee) o;
-    return Objects.equals(id, employee.id) &&
-            Objects.equals(firstName, employee.firstName) &&
-            Objects.equals(lastName, employee.lastName) &&
-            Objects.equals(description, employee.description) &&
-            Objects.equals(jobYears, employee.jobYears);
+  if (this == o) return true;
+  if (o == null || getClass() != o.getClass()) return false;
+  Employee employee = (Employee) o;
+  return Objects.equals(id, employee.id) &&
+          Objects.equals(firstName, employee.firstName) &&
+          Objects.equals(lastName, employee.lastName) &&
+          Objects.equals(description, employee.description) &&
+          Objects.equals(jobYears, employee.jobYears);
 }
 
 @Override
 public int hashCode() {
 
-    return Objects.hash(id, firstName, lastName, description);
+  return Objects.hash(id, firstName, lastName, description);
 }
 
 public Long getId() {
-    return id;
+  return id;
 }
 
 public void setId(Long id) throws IllegalArgumentException {
-    if (id == null)
-        throw new IllegalArgumentException("The ID can't be null.");
-    this.id = id;
+  if (id == null)
+    throw new IllegalArgumentException("The ID can't be null.");
+  this.id = id;
 }
 
 public String getFirstName() {
-    return firstName;
+  return firstName;
 }
 
 public void setFirstName(String firstName) throws IllegalArgumentException {
-    if (firstName == null || firstName.trim().isEmpty())
-        throw new IllegalArgumentException("The firstName can't be null or empty.");
-    this.firstName = firstName;
+  if (firstName == null || firstName.trim().isEmpty())
+    throw new IllegalArgumentException("The firstName can't be null or empty.");
+  this.firstName = firstName;
 }
 
 public String getLastName() { return lastName; }
 
 public void setLastName(String lastName) throws IllegalArgumentException {
-    if (lastName == null || lastName.trim().isEmpty())
-        throw new IllegalArgumentException("The lastName can't be null or empty.");
-    this.lastName = lastName;
+  if (lastName == null || lastName.trim().isEmpty())
+    throw new IllegalArgumentException("The lastName can't be null or empty.");
+  this.lastName = lastName;
 }
 
 public String getDescription() { return description; }
 
 public void setDescription(String description) throws IllegalArgumentException {
-    if (description == null || description.trim().isEmpty())
-        throw new IllegalArgumentException("The description can't be null or empty.");
-    this.description = description;
+  if (description == null || description.trim().isEmpty())
+    throw new IllegalArgumentException("The description can't be null or empty.");
+  this.description = description;
 }
 
 public int getJobYears() {return jobYears;}
 
 public void setJobYears(int jobYears) throws IllegalArgumentException {
-    if (jobYears < 0)
-        throw new IllegalArgumentException("jobYears can't be negative.");
-    this.jobYears = jobYears;
+  if (jobYears < 0)
+    throw new IllegalArgumentException("jobYears can't be negative.");
+  this.jobYears = jobYears;
 }
 
 
 
 @Override
 public String toString() {
-    return "Employee{" +
-            "id=" + id +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", description='" + description + '\'' +
-            ", jobYears='" + jobYears + '\'' +
-            '}';
+  return "Employee{" +
+          "id=" + id +
+          ", firstName='" + firstName + '\'' +
+          ", lastName='" + lastName + '\'' +
+          ", description='" + description + '\'' +
+          ", jobYears='" + jobYears + '\'' +
+          '}';
 }
 
 
@@ -435,15 +436,15 @@ the validations for the `setEmail` method:
 
 ```java
 public void setEmail(String email) throws IllegalArgumentException {
-		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("The email isn't valid.");
-		}
-		if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
-			this.email = email;
-		} else {
-			throw new IllegalArgumentException("The email isn't valid.");
-		}
-	}
+  if (email == null || email.isEmpty()) {
+    throw new IllegalArgumentException("The email isn't valid.");
+  }
+  if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+    this.email = email;
+  } else {
+    throw new IllegalArgumentException("The email isn't valid.");
+  }
+}
 ```
 
 **Unit Testing**: I verified the implementation by creating unit tests for the edge cases where
@@ -499,14 +500,14 @@ we had to guarantee that the email had to contain an `@` so the email setter wit
 
 ```java
 public void setEmail(String email) throws IllegalArgumentException {
-    if (email == null || email.isEmpty()) {
-        throw new IllegalArgumentException("The email can't be null or empty.");
-    }
-    if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
-        this.email = email;
-    } else {
-        throw new IllegalArgumentException("The email isn't valid.");
-    }
+  if (email == null || email.isEmpty()) {
+    throw new IllegalArgumentException("The email can't be null or empty.");
+  }
+  if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$")) {
+    this.email = email;
+  } else {
+    throw new IllegalArgumentException("The email isn't valid.");
+  }
 }
 ```
 
@@ -696,14 +697,14 @@ the following task was created, following the runClient example:
 
 ```java
 task runServer(type:JavaExec, dependsOn:classes){
-    group = "DevOps"
-    description = "Launches a server with the following port: <59001> "
+  group = "DevOps"
+  description = "Launches a server with the following port: <59001> "
 
-    classpath = sourceSets.main.runtimeClasspath
+  classpath = sourceSets.main.runtimeClasspath
 
-    mainClass = 'basic_demo.ChatServerApp'
+  mainClass = 'basic_demo.ChatServerApp'
 
-    args 'localhost', '59001'
+  args 'localhost', '59001'
 }
 ```
 
@@ -726,10 +727,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class AppTest {
-@Test public void testAppHasAGreeting() {
+  @Test public void testAppHasAGreeting() {
     App classUnderTest = new App();
     assertNotNull("app should have a greeting", classUnderTest.getGreeting());
-    }
+  }
 }
 ```
 
@@ -754,11 +755,11 @@ For this part of the assignment I opened `build.gradle` and added the following 
 
 ```java
 task copySources(type: Copy) {
-    group = "DevOps"
-    description = "Copies the source files into a backup folder"
+  group = "DevOps"
+  description = "Copies the source files into a backup folder"
 
-    from 'src'
-    into 'backup'
+  from 'src'
+  into 'backup'
 }
 ```
 
@@ -773,12 +774,12 @@ new zipped file:
 
 ```java
 task zipSources(type: Zip) {
-    group = "DevOps"
-    description = "Zips the source files into a zip file"
+  group = "DevOps"
+  description = "Zips the source files into a zip file"
 
-    from 'src'
-    archiveFileName = 'src.zip'
-    destinationDirectory = file('backup')
+  from 'src'
+  archiveFileName = 'src.zip'
+  destinationDirectory = file('backup')
 }
 ```
 
@@ -880,10 +881,10 @@ the frontend:
 
 ```java
 frontend {
-nodeVersion = "16.20.2",
-assembleScript = "run build",
-cleanScript = "run clean",
-checkScript = "run check"
+  nodeVersion = "16.20.2",
+          assembleScript = "run build",
+          cleanScript = "run clean",
+          checkScript = "run check"
 }
 ```
 
@@ -891,21 +892,21 @@ After these two steps I updated the object section in `package.jason`:
 
 ```java
 "scripts": {
-"webpack": "webpack",
-"build": "npm run webpack",
-"check": "echo Checking frontend",
-"clean": "echo Cleaning frontend",
-"lint": "echo Linting frontend",
-"test": "echo Testing frontend"
-},
+        "webpack": "webpack",
+        "build": "npm run webpack",
+        "check": "echo Checking frontend",
+        "clean": "echo Cleaning frontend",
+        "lint": "echo Linting frontend",
+        "test": "echo Testing frontend"
+        },
 ```
 
 After trying to compile the project at this point I kept running into some errors,
-with some dependencies on the classes inside `src/main/java` so I had to update the 
+with some dependencies on the classes inside `src/main/java` so I had to update the
 import statements from `javax.persistence` to `jakarta.persistence`.
-- I tried running `./gradlew build` and it built successfully. 
+- I tried running `./gradlew build` and it built successfully.
 - Next, `./gradlew bootRun` was executed and after accessing `http://localhost:8080/`, it contained
-visual elements this time, proving that it was now ready for the next step.
+  visual elements this time, proving that it was now ready for the next step.
 
 **Gradle tasks**
 
@@ -918,7 +919,7 @@ and cleanup, two specialized Gradle tasks have been created: copyJar and cleanWe
 The `copyJar` task is designed to transfer the `.jar` file generated by the bootJar
 task from its output location to a dist directory at the project's root. This ensures
 that the correct, fully assembled `.jar` file is used for distribution, minimizing errors
-and ensuring that deployments contain the latest build. I had to format the task to 
+and ensuring that deployments contain the latest build. I had to format the task to
 a more recent Gradle's configuration API, where a task is introduced by
 "task.register", for example:
 
@@ -940,7 +941,7 @@ maintains a clear and reliable build sequence.
 **Goal**:
 
 The `cleanWebpack` task is responsible for removing all files generated by Webpack,
-located in the `src/main/resources/static/built` directory. This keeps the build 
+located in the `src/main/resources/static/built` directory. This keeps the build
 environment clean and ensures that only necessary files are included in each build,
 preventing conflicts from outdated files.
 
@@ -966,10 +967,10 @@ it into the regular cleanup process.
 
 **Outcome**:
 - The `.jar` file generated by the bootJar task is copied from its output directory to the `dist` folder
-located at the project's root. 
-- Ensures that the correct, fully assembled `.jar` file is used for distribution. 
-- Minimizes errors and guarantees that deployments contain 
-the most current build.
+  located at the project's root.
+- Ensures that the correct, fully assembled `.jar` file is used for distribution.
+- Minimizes errors and guarantees that deployments contain
+  the most current build.
 
 **Task**: cleanWebpack
 
@@ -981,6 +982,337 @@ Outcome:
 - Maintains a clean build environment.
 - Ensures that only necessary files are included in each build, preventing potential conflicts from stale or outdated files.
 
+### Alternative Implementation
 
+Transitioning from Gradle to Maven for Spring Boot Projects
+Switching from Gradle to Maven can be a strategic decision for many developers,
+especially those seeking a more structured and predictable build process.
+Maven offers robust dependency management, extensive plugin support, and a
+standardized lifecycle that can simplify project setup and maintenance. Below,
+I will outline the steps required to configure Maven for a Spring Boot application,
+ensuring it mirrors the functionality achieved with Gradle, including frontend
+integration, custom build tasks, and file management.
 
+**Project Structure**
 
+To showcase the implementation of Maven as an alternative to Gradle, I have created
+two branches in my repository:
+
+**Main Branch**: Contains the Gradle-based build setup.
+**Maven Branch**: Contains the Maven-based build setup.
+
+**Step-by-Step Guide**
+
+Step 1 - Create a Backup of my Project.
+Before making any changes, it's crucial to create a backup of my current Gradle-based
+project. This ensures you can revert back if needed.
+
+Backup:
+- Zip the project folder:
+
+```Terminal
+cd CA1/part3/react-and-spring-data-rest-basic
+zip -r project-backup.zip .
+```
+
+- Commit all Changes (After trying to commit and push the recently created zip backup
+  file I wasn't able to add it to remote as the file exceeded 100MB, so I kept a local
+  copy of it. Below are shown the steps one should take if it did not surpass the size
+  limit:
+
+```Terminal
+  git add .
+  git commit -m "Backup before transitioning to Maven"
+  git push origin main
+```
+
+- Create new branch for Maven implementation
+```Terminal
+git checkout -b maven-transition
+```
+
+Step 2: Convert Build Script
+
+- Delete Gradle Files:
+  Remove `build.gradle` and `settings.gradle` files from my project.
+
+Create pom.xml:
+
+**Initial Project Setup**
+
+To begin, I created a pom.xml file for the Spring Boot application, incorporating
+essential dependencies such as REST, Thymeleaf, JPA, and H2. Below is the pom.xml
+showcasing these dependencies:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>my-spring-boot-app</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+      <version>2.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-rest</artifactId>
+      <version>2.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.200</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>4.0.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+```
+
+Step 3: Integrate Frontend Assets
+
+To manage `Node` and `npm` installation and build the frontend, I configured the
+`frontend-maven-plugin`:
+
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>com.github.eirslett</groupId>
+      <artifactId>frontend-maven-plugin</artifactId>
+      <version>1.11.0</version>
+      <configuration>
+        <nodeVersion>v16.20.2</nodeVersion>
+        <workingDirectory>src/main/resources/static</workingDirectory>
+      </configuration>
+      <executions>
+        <execution>
+          <id>install node and npm</id>
+          <goals>
+            <goal>install-node-and-npm</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>npm install</id>
+          <goals>
+            <goal>npm</goal>
+          </goals>
+          <configuration>
+            <arguments>install</arguments>
+          </configuration>
+        </execution>
+        <execution>
+          <id>npm run build</id>
+          <goals>
+            <goal>npm</goal>
+          </goals>
+          <configuration>
+            <arguments>run build</arguments>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <version>2.7.0</version>
+    </plugin>
+  </plugins>
+</build>
+```
+
+Step 4 : Copying the JAR File
+
+To copy the generated .jar file to a distribution folder, I utilized the
+`maven-resources-plugin`:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-resources-plugin</artifactId>
+  <version>3.2.0</version>
+  <executions>
+    <execution>
+      <id>copy-jar</id>
+      <phase>package</phase>
+      <goals>
+        <goal>copy-resources</goal>
+      </goals>
+      <configuration>
+        <outputDirectory>${project.build.directory}/dist</outputDirectory>
+        <resources>
+          <resource>
+            <directory>${project.build.directory}</directory>
+            <includes>
+              <include>*.jar</include>
+            </includes>
+          </resource>
+        </resources>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
+
+Step 5 : Cleaning Up Webpack Files
+
+To delete the Webpack-generated files, I configured the `maven-clean-plugin`:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-clean-plugin</artifactId>
+  <version>3.1.0</version>
+  <executions>
+    <execution>
+      <id>delete-webpack-files</id>
+      <phase>clean</phase>
+      <goals>
+        <goal>clean</goal>
+      </goals>
+      <configuration>
+        <filesets>
+          <fileset>
+            <directory>src/main/resources/static/built</directory>
+            <includes>
+              <include>*</include>
+            </includes>
+          </fileset>
+        </filesets>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
+# Comparing Maven and Gradle
+
+When deciding between Maven and Gradle for building and managing projects, it's
+important to understand their unique characteristics. Here's a breakdown of both
+tools based on various factors:
+
+## 1. **Build Language**
+
+- **Maven**: Uses XML-based configuration, which is structured but can be verbose
+  and harder to read.
+- **Gradle**: Uses Groovy or Kotlin DSL (Domain Specific Language), which provides
+  a more flexible, concise, and readable configuration, though it can have a steeper
+  learning curve.
+
+## 2. **Performance**
+
+- **Maven**: Tends to be slower because it follows a linear, phase-by-phase build
+  process.
+- **Gradle**: Optimized for performance with support for incremental builds, which
+  means only changed parts of the project are rebuilt, making it faster, especially
+  for large projects.
+
+## 3. **Flexibility and Customization**
+
+- **Maven**: It has a rigid build lifecycle that can be limiting. The structure is
+  standardized, which makes it less flexible but ideal for simple, conventional projects.
+- **Gradle**: Highly customizable and more flexible. We can adjust the build process
+  in more granular ways, providing better support for complex, multi-project builds.
+
+## 4. **Dependency Management**
+
+- **Maven**: Uses a centralized repository system, which is simple and works well
+  for most projects, but it lacks dynamic versioning and flexibility in managing dependencies.
+- **Gradle**: Offers more powerful dependency management, with dynamic versioning
+  and fine-grained control over dependencies. It integrates well with external
+  repositories, making it more adaptable to different project needs.
+
+## 5. **Ease of Use**
+
+- **Maven**: Easier to get started with, thanks to its simple and predictable
+  structure. Its standardization allows new developers to pick it up quickly.
+- **Gradle**: Although initially harder to grasp due to its DSL, it’s much more
+  powerful once learned. Its flexibility allows developers to fine-tune the build
+  process for optimal results.
+
+## 6. **Plugin Ecosystem**
+
+- **Maven**: Has a large and well-established plugin ecosystem, but some plugins
+  can be complex to configure or integrate.
+- **Gradle**: Also has a rich ecosystem of plugins, but it provides better support
+  for custom plugins, making it easier to extend its functionality as needed.
+
+## 7. **Community and Support**
+
+- **Maven**: Being around for a longer time, Maven has a massive community and
+  extensive documentation. It's the default for many Java developers.
+- **Gradle**: The community is growing rapidly, with strong support for modern
+  projects like multi-module builds. Gradle also has ample documentation, but it’s
+  not as widespread as Maven’s.
+
+## 8. **Integration with Modern Tools**
+
+- **Maven**: While it works well with most traditional Java projects, it doesn’t
+  have as many integrations with newer technologies like Kotlin, multi-language builds,
+  or cloud-native applications.
+- **Gradle**: Offers seamless integration with Kotlin and other modern tools, making
+  it a great choice for contemporary, multi-language projects.
+
+## 9. **Multi-project Builds**
+
+- **Maven**: Supports projects with various modules but can become difficult to manage and
+  scale as complexity increases. Managing dependencies and configurations across large
+  multi-project setups can become cumbersome.
+- **Gradle**: Specifically designed with multi-project builds in mind. It handles
+  complex project structures better than Maven and supports advanced features like
+  parallel execution to speed up builds in large multi-project environments.
+
+## Conclusion
+
+While Maven is a great choice for straightforward, conventional Java projects with
+its simple configuration and reliable plugin ecosystem, Gradle shines in more complex
+and modern projects. It provides better performance, flexibility, and support for
+multi-project builds, making it ideal for larger, more dynamic applications.
+
+- **Choose Maven** if you prioritize simplicity, standardization, and a large community,
+  particularly for traditional Java applications.
+- **Choose Gradle** if you need flexibility, faster builds, and better support for
+  modern development practices and complex projects.
+
+Ultimately, the choice between Maven and Gradle will depend on your specific project
+requirements and development preferences.
