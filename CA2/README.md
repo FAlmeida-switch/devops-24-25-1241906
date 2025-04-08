@@ -278,5 +278,5 @@ devops-24-25-1241906/
 
 #### Access Methods:
 
-- SSH: `ssh falmeida@192.168.56.5`
+- SSH: `ssh falmeida@192.168.56.5
 - Web: http://192.168.56.5:8080
