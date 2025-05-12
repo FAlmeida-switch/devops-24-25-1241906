@@ -11,16 +11,11 @@ plugins {
     id 'application'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+group 'com.example'
+version '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
-}
-
-configurations {
-    // configuration that holds jars to include in the jar
-    extraLibs
 }
 
 dependencies {
@@ -29,7 +24,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     testImplementation 'junit:junit:4.12'
 }
- 
+
 
 // Define the main class for the application
 mainClassName = 'basic_demo.App'
@@ -43,7 +38,7 @@ jar {
         attributes "Main-Class": "basic_demo.App"
     }
 
-   from {
+    from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
@@ -63,7 +58,7 @@ task runServer(type:JavaExec, dependsOn: classes){
 task runClient(type:JavaExec, dependsOn: classes){
     group = "DevOps"
     description = "Launches a chat client that connects to a server on localhost:59001 "
-  
+
     classpath = sourceSets.main.runtimeClasspath
 
     mainClass = 'basic_demo.ChatClientApp'
@@ -87,3 +82,7 @@ task zipSources(type: Zip) {
     archiveFileName = 'src.zip'
     destinationDirectory = file('backup')
 }
+
+// Ensure Java 11 compatibility:
+sourceCompatibility = '11'
+targetCompatibility = '11'
