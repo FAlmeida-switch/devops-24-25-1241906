@@ -1,0 +1,12 @@
+# Vagrant files
+.vagrant/
+machines/
+.Vagrantfile.swp
+bundler/
+
+# Common ignores
+*.log
+*.tmp
+*.swp
+*.bak
+.DS_Store
