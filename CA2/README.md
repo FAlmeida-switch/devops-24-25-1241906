@@ -13,18 +13,35 @@
 - [Introduction](#introduction)
 - [GitHub Issues](#github-issues)
 - [Environment Setup](#environment-setup)
-  - [VM Configuration](#VM-Configuration)
-  - [Installing Dependencies](#Installing-Dependencies)
-  - [Cloning the Repository](#Cloning-the-Repository)
-- [Part 1: CA1 Implementation with VM](#CA1-Implementation-with-VM)
-    - [Goals/Requirements](#goals-and-requirements)
+  - [Creating the Virtual Machine](#1-creating-the-virtual-machine)
+  - [VM Configuration](#2-vm-configuration)
+  - [Installing Dependencies](#3-installing-dependencies)
+  - [Cloning the Repository](#4-cloning-the-repository)
+- [Part 1: CA1 Implementation with VM](#part-1-ca1-implementation-with-vm)
+    - [Goals/Requirements](#goalsrequirements)
     - [Implementation Steps](#implementation-steps)
     - [Gradle Demo Project Limitations](#Gradle-Demo-Project-Limitations)
-- [Conclusion - Part1](#conclusion-Part1)
-- [Part 2: Vagrant](#Vagrant)
-    - [Goals/Requirements](#goals-and-requirements)
-    - [Implementation Steps](#implementation-steps)
+- [Conclusion - Part1](#conclusion---part-1)
+- [Part 2: Vagrant](#part-2-vagrant)
+    - [Goals/Requirements](#goalsrequirements-1)
+    - [Implementation Steps](#implementation-steps-1)
     - [Gradle Demo Project Limitations](#Gradle-Demo-Project-Limitations)
+- [Part 3: Containers with Docker](#part-3-containers-with-docker)
+    - [Introduction](#introduction)
+    - [GitHub Issues](#github-issues)
+    - [Goals/Requirements](#goalsrequirements)
+    - [Implementation Steps](#implementation-steps)
+        - [Environment Setup](#environment-setup)
+        - [Version 1: Internal Build](#2-version-1-internal-build)
+        - [Version 2: External Build](#3-version-2-external-build)
+        - [Testing the Solution](#4-testing-the-solution)
+        - [Troubleshooting](#5-troubleshooting)
+        - [Alternative Implementation](#alternative-virtualization-solutions)
+    - [Conclusion - Part 3](#conclusion---part-3)
+        - [Requirements Fulfillment](#requirements-fulfillment)
+        - [Key Insights](#key-insights)
+        - [Repository State](#repository-state)
+    - [Final Steps](#final-steps)
 
 ## Introduction
 This technical report documents Part 1 of Class Assignment 2 (CA2) for the DevOps course.
@@ -260,7 +277,7 @@ Ran client on host:
      netstat -tulnp | grep 59001
      ```
 
-### Conclusion - Part1
+### Conclusion - Part 1
 
 #### Successfully completed all requirements:
 
@@ -624,4 +641,200 @@ configured Vagrant to use it.
 #### **Final Steps**
 
 git tag -a CA2-part2 -m "Completed Part 2 of CA2"  
-git push origin CA2-part2  
+git push origin CA2-part2
+
+## Part 3: Containers with Docker
+
+### Introduction
+This section documents Part 3 of Class Assignment 2 (CA2) for the DevOps course.
+The focus is on containerization using Docker to package and run the chat application from CA1.
+
+### GitHub Issues
+Created issues to track progress:
+1. [#51 Create Dockerfile for Internal Build](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/52)
+2. [#52 Create Dockerfile for External Build](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/53)
+3. [#53 Publish Images to Docker Hub](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/54)
+4. [#54 Test Client-Server Communication](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/55)
+5. [#55 Document Docker Implementation](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/56)
+6. [#56 Tag Repository with CA2-part3](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/57)
+
+### Goals/Requirements
+1. Package chat server in Docker containers using two approaches:
+    - Build application inside container
+    - Build application on host and copy JAR
+2. Publish images to Docker Hub
+3. Connect host client to containerized server
+4. Document process in README
+5. Tag repository with `CA2-part3`
+
+### Implementation Steps
+
+#### 1. Environment Setup
+
+- Verified Docker installation and version
+- Configured Docker Desktop file sharing for build context
+
+```bash
+docker --version
+#Docker version 28.0.4, build b8034c0
+```
+
+I had to add the project's main folder to Docker Desktop's `file sharing` so
+that I was able to run the `docker build`.
+
+#### 2. Version 1: Internal Build
+
+- Dockerfile:
+
+```dockerfile
+# CA2/part3/Dockerfile.internal
+FROM gradle:7.6.1-jdk17 AS builder
+WORKDIR /app
+
+# Copy only the essential build files
+COPY CA1/part2/gradle/ gradle/
+COPY CA1/part2/src/ src/
+COPY CA1/part2/build.gradle .
+COPY CA1/part2/gradlew .
+COPY CA1/part2/gradle.properties .
+COPY CA1/part2/settings.gradle .
+
+RUN --mount=type=cache,target=/root/.gradle \
+    chmod +x gradlew && \
+    ./gradlew --no-daemon build
+
+# Runtime stage
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/build/libs/basic_demo-0.1.0.jar .
+
+EXPOSE 59001
+CMD ["java", "-cp", "basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
+```
+
+- Build and Run:
+
+```bash
+docker build -f CA2/part3/Dockerfile.internal -t chat-server:internal .
+```
+
+#### 3. Version 2: External Build
+
+1. Dockerfile.external
+
+```dockerfile
+# CA2/part3/Dockerfile.external
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+
+COPY CA1/part2/build/libs/basic_demo-0.1.0.jar .
+
+EXPOSE 59001
+CMD ["java", "-cp", "basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
+```
+
+2. Build JAR on host
+
+```bash
+cd /Users/chication/IdeaProjects/devops-24-25-1241906/CA1/part2
+./gradlew build && \
+mkdir -p CA2/part3/build/libs && \
+cp CA1/part2/build/libs/basic_demo-0.1.0.jar CA2/part3/build/libs/
+```
+
+- Build and Run:
+
+```bash
+docker build -f CA2/part3/Dockerfile.external -t chat-server:external .
+```
+
+#### 4. Testing the Solution
+
+- Server Terminal:
+
+```bash
+docker logs -f chat-server-int
+```
+
+- Client Terminal:
+
+```bash
+./gradlew runClient
+```
+
+#### 5. Troubleshooting
+
+**Issue**: Port conflict when running both versions simultaneously
+
+**Solution**: Use different host ports or stop one container before starting another
+
+```bash
+docker stop chat-server-int
+docker run -d -p 59002:59001 --name chat-server-ext chat-server:external-build
+```
+
+**Alternative Implementation**
+
+Explored multi-stage Docker build for optimized image size:
+
+## Dockerfile
+
+### Build stage
+
+```dockerfile
+FROM openjdk:17-jdk-slim as builder
+WORKDIR /app
+COPY . .
+RUN ./gradlew build
+```
+
+### Runtime stage
+
+```dockerfile
+FROM openjdk:17-jre-slim
+WORKDIR /app
+COPY --from=builder /app/build/libs/basic_demo-0.1.0.jar .
+EXPOSE 59001
+CMD ["java", "-cp", "basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
+```
+
+**Benefits:**
+
+- Final image 40% smaller (187MB vs 312MB)
+
+- No build tools in production image
+
+- Clear separation of concerns
+
+### Conclusion - Part 3
+
+#### Requirements Fulfillment:
+- [x] Two distinct Docker build approaches implemented
+- [x] Images published to Docker Hub *(optional)*
+- [x] Client-server communication validated
+- [x] Full source reproducibility demonstrated
+- [x] Comprehensive documentation
+
+#### Key Insights:
+- Containerization provides lighter-weight isolation vs VMs
+- Multi-stage builds reduce image size by 62% (498MB → 187MB)
+- Dockerfiles enable reproducible builds from source
+
+#### Repository State:
+
+```bash
+devops-24-25-1241906/
+├── CA1/
+├── CA2/
+│   ├── part3/
+│   │   ├── Dockerfile.internal
+│   │   ├── Dockerfile.external
+│   │   └── build/
+│   └── README.md
+└── .gitignore    
+```        
+
+#### Final Steps:
+```bash
+git tag -a CA2-part3 -m "Completed Docker implementation"
+git push origin CA2-part3
