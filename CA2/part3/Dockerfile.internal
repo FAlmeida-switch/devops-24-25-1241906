@@ -1,0 +1,23 @@
+# CA2/part3/Dockerfile.internal
+FROM gradle:7.6.1-jdk17 AS builder
+WORKDIR /app
+
+# Copy only the essential build files
+COPY CA1/part2/gradle/ gradle/
+COPY CA1/part2/src/ src/
+COPY CA1/part2/build.gradle .
+COPY CA1/part2/gradlew .
+COPY CA1/part2/gradle.properties .
+COPY CA1/part2/settings.gradle .
+
+RUN --mount=type=cache,target=/root/.gradle \
+    chmod +x gradlew && \
+    ./gradlew --no-daemon build
+
+# Runtime stage
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/build/libs/basic_demo-0.1.0.jar .
+
+EXPOSE 59001
+CMD ["java", "-cp", "basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
