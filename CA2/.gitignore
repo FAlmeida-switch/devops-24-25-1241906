@@ -1,0 +1,22 @@
+# Vagrant files
+.vagrant/
+machines/
+.Vagrantfile.swp
+bundler/
+
+# Common ignores
+*.log
+*.tmp
+*.swp
+*.bak
+.DS_Store
+
+# CA1/part2/.dockerignore
+build/
+.gradle/
+*.iml
+.idea/
+.git/
+
+# Docker builds
+CA2/part3/build/  # For external build JARs
