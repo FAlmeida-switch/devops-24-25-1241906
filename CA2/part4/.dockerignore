@@ -1,6 +1,35 @@
+# Ignore common build artifacts and temporary files
 target/
-.mvn/
-.idea/
-*.iml
-*.log
 node_modules/
+build/
+coverage/
+logs/
+*.log
+*.tmp
+*.zip
+*.tar.gz
+*.rar
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Ignore Git-related files
+.git/
+.gitignore
+
+.DS_Store
+.npm/
+.cache/
+.env
+npm-debug.log*
+yarn-debug.log*

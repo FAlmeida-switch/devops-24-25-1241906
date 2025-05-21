@@ -1,31 +1,28 @@
-version: '3.8'
-
 services:
   web:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..  # Go up two levels to project root
+      dockerfile: CA2/part4/Dockerfile
     container_name: ca2-web-app
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://db:9092/~/testdb
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://db:1521/~/testdb
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD: password
 
   db:
-    # This image provides an H2 database server, consistent with my application's configuration.
-    image: ghcr.io/h2database/h2:2.2.224
+    image: oscarfonts/h2:2.2.224
     container_name: ca2-database
     ports:
-      - "9092:9092" # H2 TCP port
-      - "8082:8082" # H2 Console port
+      - "1521:1521"  # TCP port for JDBC
+      - "8082:8082"  # Web console port
     volumes:
-      # Mount a named volume to persist H2 data.
-      # The /opt/h2-data path inside the container is a common convention for H2 images.
       - db_data:/opt/h2-data
+    environment:
+      H2_OPTIONS: -ifNotExists
 
 volumes:
   db_data:
