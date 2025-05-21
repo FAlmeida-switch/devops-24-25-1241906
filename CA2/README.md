@@ -13,25 +13,25 @@
 - [Introduction](#introduction)
 - [GitHub Issues](#github-issues)
 - [Environment Setup](#environment-setup)
-  - [Creating the Virtual Machine](#1-creating-the-virtual-machine)
-  - [VM Configuration](#2-vm-configuration)
-  - [Installing Dependencies](#3-installing-dependencies)
-  - [Cloning the Repository](#4-cloning-the-repository)
+    - [Creating the Virtual Machine](#1-creating-the-virtual-machine)
+    - [VM Configuration](#2-vm-configuration)
+    - [Installing Dependencies](#3-installing-dependencies)
+    - [Cloning the Repository](#4-cloning-the-repository)
 - [Part 1: CA1 Implementation with VM](#part-1-ca1-implementation-with-vm)
     - [Goals/Requirements](#goalsrequirements)
     - [Implementation Steps](#implementation-steps)
-    - [Gradle Demo Project Limitations](#Gradle-Demo-Project-Limitations)
+    - [Gradle Demo Project Limitations](#gradle-demo-project-limitations)
 - [Conclusion - Part1](#conclusion---part-1)
 - [Part 2: Vagrant](#part-2-vagrant)
     - [Goals/Requirements](#goalsrequirements-1)
     - [Implementation Steps](#implementation-steps-1)
-    - [Gradle Demo Project Limitations](#Gradle-Demo-Project-Limitations)
+    - [Gradle Demo Project Limitations](#gradle-demo-project-limitations)
 - [Part 3: Containers with Docker](#part-3-containers-with-docker)
-    - [Introduction](#introduction)
-    - [GitHub Issues](#github-issues)
-    - [Goals/Requirements](#goalsrequirements)
-    - [Implementation Steps](#implementation-steps)
-        - [Environment Setup](#environment-setup)
+    - [Introduction](#introduction-1)
+    - [GitHub Issues](#github-issues-1)
+    - [Goals/Requirements](#goalsrequirements-2)
+    - [Implementation Steps](#implementation-steps-2)
+        - [Environment Setup](#1-environment-setup)
         - [Version 1: Internal Build](#2-version-1-internal-build)
         - [Version 2: External Build](#3-version-2-external-build)
         - [Testing the Solution](#4-testing-the-solution)
@@ -42,6 +42,22 @@
         - [Key Insights](#key-insights)
         - [Repository State](#repository-state)
     - [Final Steps](#final-steps)
+- [Part 4: Containers with Docker](#ca2---part-4-containers-with-docker)
+    - [Introduction](#introduction-2)
+    - [GitHub Issues](#github-issues-2)
+    - [Goals/Requirements](#3-goalsrequirements)
+    - [Project Structure](#4-project-structure)
+    - [Implementation Steps](#5-implementation-steps)
+        - [1. Create the `Dockerfile`](#51-create-the-dockerfile)
+        - [2. Create the `.dockerignore` file](#52-create-the-dockerignore-file)
+        - [3. Create the `docker-compose.yaml`](#53-create-the-docker-composeyaml)
+        - [4. Build and Run the Containers](#54-build-and-run-the-containers)
+        - [5. Implement Database Volume and Data Copy](#55-implement-database-volume-and-data-copy)
+        - [6. Publish Images to Docker Hub](#56-publish-images-to-docker-hub)
+    - [Tag Repository with CA2-part4](#6-tag-repository-with-ca2-part4)
+    - [Kubernetes as a Docker Alternative (Optional)](#7-kubernetes-as-a-docker-alternative-optional)
+    - [Conclusion - Part 4](#conclusion---part-4)
+
 
 ## Introduction
 This technical report documents Part 1 of Class Assignment 2 (CA2) for the DevOps course.
@@ -838,3 +854,347 @@ devops-24-25-1241906/
 ```bash
 git tag -a CA2-part3 -m "Completed Docker implementation"
 git push origin CA2-part3
+```
+
+## CA2 - Part 4: Containers with Docker
+
+### 1. Introduction
+
+This section details my implementation of containerization for the full-stack Spring
+Boot and React application using Docker. I leveraged Docker to package the application
+and all its dependencies into isolated, reproducible, and portable containers, enabling
+consistent deployment across various environments. This part of the assignment 
+specifically focuses on creating robust Docker images, orchestrating multi-service 
+applications using Docker Compose, ensuring data persistence, and publishing images to
+Docker Hub.
+
+
+### 2. GitHub Issues
+1.  [#57 Create Multi-Stage Dockerfile for Spring Boot & React Application](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/57)
+2.  [#58 Configure .dockerignore for Optimized Docker Builds](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/58)
+3.  [#59 Set Up docker-compose.yaml for Web Service & H2 Database](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/59)
+4.  [#60 Build and Run Docker Containers via Docker Compose](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/60)
+5.  [#61 Implement Database Volume and Data Copy using docker exec](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/61)
+6.  [#62 Publish Docker Images (Web & DB) to Docker Hub](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/62)
+7.  [#63 Tag Repository with CA2-part4](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/63)
+8.  [#64 Explore Kubernetes as a Docker Alternative (Optional)](https://github.com/FAlmeida-switch/devops-24-25-1241906/issues/64)
+
+### 3. Goals/Requirements
+
+* Containerize the multi-component application (Spring Boot Backend + React Frontend) using Docker, similar to CA2 Part 2 but with Docker.
+* Utilize `docker-compose` to create two services: `web` (for Tomcat and Spring application) and `db` (for H2 server database).
+* Publish the `db` and `web` images to Docker Hub.
+* Use a volume with the `db` container and copy the database file to this volume using `docker exec`.
+* Describe the entire process in this `README.md` file, including all Docker files (`docker-compose.yml`, `Dockerfile`).
+* At the end of this assignment, tag the repository with `CA2-part4`.
+
+
+### 4. Project Structure
+
+My project structure is organized as follows:
+
+```bash
+CA2/part4/
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   └── js/
+│   └── resources/
+├── Dockerfile
+├── docker-compose.yaml
+└── .dockerignore
+```
+
+### 5. Implementation Steps
+
+#### 5.1. Create the `Dockerfile`
+
+The `Dockerfile` contains the instructions for building my Docker image. 
+For a Spring Boot application with a React frontend built 
+via `frontend-maven-plugin`, a **multi-stage build** is the most effective
+approach I chose. This method optimizes image size by separating build-time 
+dependencies from runtime necessities.
+
+I created a file named `Dockerfile` in my project's root directory with the 
+following content:
+
+**Stage 1: Build the React Frontend**
+
+```dockerfile
+FROM node:16-alpine AS frontend-builder
+WORKDIR /app
+
+COPY CA2/part4/src/main/js/package.json CA2/part4/src/main/js/package-lock.json ./
+RUN npm install
+
+COPY CA2/part4/src/main/js/ ./
+
+RUN npm run build
+```
+
+**Stage 2: Build the Spring Boot Backend**
+
+```dockerfile
+FROM maven:3.9.3-eclipse-temurin-17 AS backend-builder
+WORKDIR /app
+
+COPY --from=frontend-builder /app/ ../src/main/resources/static/built/
+
+COPY CA2/part4/pom.xml .
+COPY CA2/part4/src/main/ ./src/main/
+
+RUN mvn clean package -DskipTests
+```
+
+**Stage 3: Create the final production image`**
+
+```dockerfile
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=backend-builder /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+#### 5.2. Create the .dockerignore file
+
+To optimize Docker build performance and reduce the final image size, I created 
+a `.dockerignore` file in my project's root directory. This file prevents unnecessary
+files (like local build artifacts or IDE configuration) from being sent to the Docker 
+daemon during the build process.
+
+```bash
+target/
+node_modules/
+build/
+coverage/
+logs/
+*.log
+*.tmp
+*.zip
+*.tar.gz
+*.rar
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+out/
+
+.git/
+.gitignore
+
+.DS_Store
+.npm/
+.cache/
+.env
+npm-debug.log*
+yarn-debug.log*
+```
+
+#### 5.3. Create the docker-compose.yaml
+   
+I used docker-compose.yaml to define and run my multi-container Docker application.
+It orchestrates my web application service and a separate database service.
+
+I created a file named docker-compose.yaml in my project's root directory:
+
+```yaml
+services:
+  web:
+    build:
+      context: ../..  # Go up two levels to project root
+      dockerfile: CA2/part4/Dockerfile
+    container_name: ca2-web-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://db:1521/~/testdb
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: password
+
+  db:
+    image: oscarfonts/h2:2.2.224
+    container_name: ca2-database
+    ports:
+      - "1521:1521"  # TCP port for JDBC
+      - "8082:8082"  # Web console port
+    volumes:
+      - db_data:/opt/h2-data
+    environment:
+      H2_OPTIONS: -ifNotExists
+
+volumes:
+  db_data:
+````
+
+#### 5.4. Build and Run the Containers
+
+I navigate to my project's root directory in my terminal (where my `Dockerfile` and
+`docker-compose.yaml` are located) and execute the following command:
+
+```bash
+docker compose up --build
+```
+
+This command will:
+
+1. Build the `web` service image using my `Dockerfile` (executing the multi-stage build process).
+
+
+2. Pull the `db` service image (if not already downloaded locally).
+
+
+3. Start both the `db` and `web` containers in the foreground. I can add `-d` for 
+detached mode (docker compose up -d`).
+
+
+#### 5.5. Implement Database Volume and Data Copy
+
+To ensure data persistence and copy the database file as required by the assignment, I
+perform the following steps:
+
+First, I stop the containers to ensure the database file is not actively being written
+to during the copy operation:
+
+```bash
+docker compose down
+```
+
+Next, I restart the db container in detached mode to be able to execute commands within it:
+
+```bash
+docker compose up -d db
+```
+
+Now, I use `docker exec` to run a shell inside the `db` container and copy the H2 database
+file to the mounted volume (`db_data`). The exact path to the H2 database file inside the
+container might vary, but a common location for the `ghcr.io/h2database/h2` image is 
+within `/opt/h2-data/`. I need to ensure the database file is actually created by the
+application (e.g., by interacting with the app and saving data).
+
+```bash
+docker exec ca2-database cp /opt/h2-data/testdb.mv.db /opt/h2-data/persisted_testdb.mv.db
+```
+
+This command copies the database file from its location within the container to the 
+`db_data` volume, making it persistent.
+
+Finally, I can verify data persistence by stopping all containers and starting them 
+again. Any data I previously added to the application should still be present.
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+#### 5.6. Publish Images to Docker Hub
+
+As required by the assignment, I will publish my Docker images to Docker Hub to make them
+accessible for deployment on other machines or cloud platforms.
+
+First, I ensure the images are built:
+
+```bash
+docker compose build
+```
+
+Then, I tag my `web` and `db` images with my Docker Hub username and a chosen version. 
+I will use the `container_name` defined in `docker-compose.yaml` (`ca2-web-app`, `ca2-database`).
+
+```bash
+docker tag part4-web falmeidaswitch/ca2-web:v1
+docker tag oscarfonts/h2:2.2.224 falmeidaswitch/ca2-db:v1
+```
+
+Finally, I push the tagged images to Docker Hub:
+
+```bash
+docker push falmeidaswitch/ca2-web:v1
+docker push falmeidaswitch/ca2-db:v1
+```
+
+### 6. Tag Repository with CA2-part4
+
+After completing all the steps and verifying the solution, I will tag my repository with
+`CA2-part4` to mark the submission for this assignment.
+
+```bash
+git tag CA2-part4
+git push origin CA2-part4
+```
+
+### 7. Kubernetes as a Docker Alternative (Optional)
+
+For further exploration, I can consider alternatives or complements to Docker regarding 
+containerization features. This information will not be evaluated for this assignment.
+
+**Option 1 - Exploring Kubernetes**
+
+Kubernetes is an open-source container orchestration system for automating application
+deployment, scaling, and management. It can be an alternative or a complement to Docker.
+
+**Comparison with Docker (regarding containerization features):**
+
+* **Docker:** Primarily focuses on creating and managing individual containers.
+Docker Compose helps orchestrate *multiple Docker containers on a single host*. 
+It's excellent for local development and simpler multi-container applications.
+
+
+* **Kubernetes:** Designed for orchestrating *hundreds or thousands of containers across
+a cluster of machines*. It provides features like automatic scaling, load balancing, 
+self-healing, and declarative configuration. While Docker is essential for building the
+containers, Kubernetes is for deploying and managing them at scale in production
+environments.
+
+**How Kubernetes could be used to solve the same goals as presented for this assignment:**
+
+To achieve the same goals as this assignment (running a web app and an H2 database), 
+Kubernetes would involve:
+
+1.  **Container Images:** I would still build the same Docker images for my Spring Boot
+`web` application and the H2 `db` service, as defined by my `Dockerfile`. Kubernetes uses
+these images.
+
+
+2.  **Deployment Definitions:** Instead of a `docker-compose.yaml`, I would write Kubernetes
+YAML files (e.g., `deployment.yaml` and `service.yaml`) to define:
+    * **Deployments:** How to run my `web` and `db` containers (e.g., number of replicas,
+    image to use, resource limits).
+    * **Services:** How to expose my `web` application to the network and how the `web`
+    service can discover and connect to the `db` service within the cluster.
+    * **Persistent Volumes:** How to provision and attach persistent storage for the H2
+    database, ensuring data survives pod restarts.
+    
+
+3.  **Orchestration:** Kubernetes would automatically manage the lifecycle of these 
+containers,
+ensuring they are running, restarting them if they fail, load balancing traffic to the
+`web` app,
+and handling updates gracefully across the cluster.
+
+In essence, while Docker focuses on the *packaging* of the application into containers,
+Kubernetes focuses on the *orchestration* and *management* of those containers in a 
+distributed, highly available environment.
+
+### Conclusion - Part 4
+This section concludes the containerization efforts for the Spring Boot and React application
+using Docker. Key objectives such as creating efficient multi-stage Docker images, 
+orchestrating services with Docker Compose, implementing data persistence for the H2 
+database, and publishing images to Docker Hub were successfully achieved.
+
+This phase underscored the power of Docker in creating reproducible and portable 
+deployment environments, simplifying the process of running complex multi-service 
+applications. The use of volumes ensured data integrity, while Docker Hub publishing 
+facilitates easy distribution and deployment across various platforms. The optional 
+exploration of Kubernetes further highlighted the advanced orchestration capabilities
+available for large-scale container deployments.
