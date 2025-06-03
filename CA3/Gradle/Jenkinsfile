@@ -32,7 +32,7 @@ pipeline {
                 dir('CA1/part2/') {
                     echo 'Executing J-unit Tests...'
                     sh './gradlew clean build'
-                    junit 'build/test-results/test/.xml'
+                    junit 'build/test-results/test/*.xml'
                 }
             }
         }
