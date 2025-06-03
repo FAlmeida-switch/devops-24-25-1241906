@@ -5,11 +5,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out from remote Repository...'
+                git branch: 'main', url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git'
             }
         }
         stage('Assemble') {
             steps {
-                dir('CA2/Part1/gradle_basic_demo') {
+                dir('CA1/part2/gradle_basic_demo') {
                     echo 'Assembling...'
                     sh 'chmod +x gradlew'
                     sh './gradlew clean assemble'
@@ -19,23 +20,29 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building...'
-                sh './gradlew clean build'
+                dir('CA1/part1/gradle_basic_demo') {
+                    echo 'Building...'
+                    sh './gradlew clean build'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Executing J-unit Tests...'
-                sh './gradlew clean build'
-                junit 'build/test-results/test/.xml'
+                dir('CA1/part1/gradle_basic_demo') {
+                    echo 'Executing J-unit Tests...'
+                    sh './gradlew clean build'
+                    junit 'build/test-results/test/.xml'
+                }
             }
         }
 
         stage('Archiving') {
             steps {
-                echo 'Archiving artifacts...'
-                archiveArtifacts 'build/distributions/*'
+                dir('CA1/part1/gradle_basic_demo') {
+                    echo 'Archiving artifacts...'
+                    archiveArtifacts 'build/distributions/*'
+                    }
             }
         }
     }
