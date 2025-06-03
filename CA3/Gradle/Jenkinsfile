@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out...'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh './gradlew clean build'
+            }
+        }
+
+        stage('Archiving') {
+            steps {
+                echo 'Archiving...'
+                archiveArtifacts 'build/distributions/*'
+            }
+        }
+    }
+}
