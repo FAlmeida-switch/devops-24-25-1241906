@@ -4,7 +4,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out...'
+                echo 'Checking out from remote Repository...'
+            }
+        }
+        stage('Assemble') {
+            steps {
+                dir('CA2/Part1/gradle_basic_demo') {
+                    echo 'Assembling...'
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean assemble'
+                }
             }
         }
 
@@ -15,9 +24,17 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo 'Executing J-unit Tests...'
+                sh './gradlew clean build'
+                junit 'build/test-results/test/.xml'
+            }
+        }
+
         stage('Archiving') {
             steps {
-                echo 'Archiving...'
+                echo 'Archiving artifacts...'
                 archiveArtifacts 'build/distributions/*'
             }
         }
