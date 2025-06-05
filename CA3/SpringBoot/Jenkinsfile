@@ -3,6 +3,12 @@
 pipeline {
     agent { label 'built-in' }
 
+    // Define global environment variables here
+    environment {
+        DOCKER_IMAGE_BASE_NAME = "falmeidaswitch/ca3-spring-app" // Your Docker Hub repository name
+        APP_VERSION = "${env.BUILD_NUMBER}" // Automatically uses Jenkins's build number for versioning
+    }
+
     tools {
         gradle 'gradle_latest'
     }
@@ -22,24 +28,23 @@ pipeline {
                     sh 'env' // This will print all environment variables
                     echo "----------------------------------------------------"
 
-                    withEnv(["DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}", "VERSION=${VERSION}"]) {
-                        sh 'docker inspect -f . jenkins/agent:jdk17'
-                    }
+                    // The DOCKER_IMAGE_BASE_NAME and APP_VERSION are now defined globally.
+                    // The 'sh 'docker inspect' command does not directly use these,
+                    // so the 'withEnv' block that caused the error is removed here.
+                    sh 'docker inspect -f . jenkins/agent:jdk17'
                 }
                 withDockerContainer(image: "jenkins/agent:jdk17", toolName: 'maven') {
-                    // This is where the pipeline will try to run docker commands inside the container
-                    // You'll likely need your Maven/Gradle build commands here to compile/package the app
-                    // Example (adjust paths as needed for your project structure):
-                    // dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    //     sh './gradlew assemble'
-                    // }
+                    // This is where your actual build commands for the Spring Boot app should go.
+                    // For example, to build the JAR:
+                    dir('CA1/part3/react-and-spring-data-rest-basic') {
+                        sh './gradlew assemble' // Or './gradlew build' depending on your needs
+                    }
                 }
             }
         }
 
         stage('Test Spring Boot') {
             agent {
-                // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
                         args: '-v /var/run/docker.sock:/var/run/docker.sock',
                         reuseNode: true
@@ -55,7 +60,6 @@ pipeline {
 
         stage('Build Docker Image') {
             agent {
-                // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
                         args: '-v /var/run/docker.sock:/var/run/docker.sock',
                         reuseNode: true
@@ -71,7 +75,8 @@ pipeline {
                     sh "cp ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar ${dockerBuildDir}/app.jar"
 
                     echo 'Building Docker image for Spring Boot application...'
-                    dockerImage = docker.build("falmeidaswitch/ca3-spring-app:${env.BUILD_NUMBER}", dockerBuildDir)
+                    // Use the globally defined variables here
+                    dockerImage = docker.build("${DOCKER_IMAGE_BASE_NAME}:${APP_VERSION}", dockerBuildDir)
                     echo "Docker image built: ${dockerImage.id}"
                 }
             }
@@ -79,7 +84,6 @@ pipeline {
 
         stage('Publish Docker Image') {
             agent {
-                // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
                         args: '-v /var/run/docker.sock:/var/run/docker.sock',
                         reuseNode: true
