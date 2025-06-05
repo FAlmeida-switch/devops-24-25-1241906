@@ -28,16 +28,15 @@ pipeline {
                     sh 'env' // This will print all environment variables
                     echo "----------------------------------------------------"
 
-                    // The DOCKER_IMAGE_BASE_NAME and APP_VERSION are now defined globally.
-                    // The 'sh 'docker inspect' command does not directly use these,
-                    // so the 'withEnv' block that caused the error is removed here.
+                    // This sh 'docker inspect' still runs on the built-in agent and is fine.
                     sh 'docker inspect -f . jenkins/agent:jdk17'
                 }
-                withDockerContainer(image: "jenkins/agent:jdk17", toolName: 'maven') {
-                    // This is where your actual build commands for the Spring Boot app should go.
-                    // For example, to build the JAR:
+                // *** CRITICAL FIX: Add args to mount the docker socket for Docker access from inside the container ***
+                withDockerContainer(image: "jenkins/agent:jdk17", args: '-v /var/run/docker.sock:/var/run/docker.sock', toolName: 'maven') {
+                    // Now, commands run inside this block will have access to the host's Docker daemon
                     dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh './gradlew assemble' // Or './gradlew build' depending on your needs
+                        echo "Running Gradle assemble inside Docker container..."
+                        sh './gradlew assemble' // Or './gradlew build'
                     }
                 }
             }
