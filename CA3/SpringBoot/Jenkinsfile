@@ -4,13 +4,13 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // Make sure you have these credentials configured in Jenkins
-        // IMPORTANT: Ensure Docker's bin directory is in the PATH for this pipeline
-        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
+        // REMOVED: PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
+        // The Docker tool configuration should handle this
     }
 
     stages {
         // Single checkout stage is sufficient for the entire pipeline
-        stage('Checkout SCM') { // Renamed for clarity compared to your recent log
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
@@ -27,19 +27,14 @@ pipeline {
             }
         }
 
-        stage('Build Backend and Frontend') { // Combined this stage as per previous full Jenkinsfile
+        stage('Build Backend and Frontend') {
             steps {
                 script {
                     echo "Building Spring Boot backend and frontend inside a Docker container..."
-                    // Use withDockerContainer to run build steps inside a Docker container
-                    // 'jenkins/agent:jdk17' typically has Java, Git, and sometimes Node.js.
-                    // If Node.js is missing from 'jenkins/agent:jdk17', you might need 'node:lts-slim'
-                    // and then install Gradle inside it, or find a combined image.
-                    // Let's stick with jenkins/agent:jdk17 for now, if it fails, we'll address Node.js
                     withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            sh 'chmod +x gradlew' // Ensure gradlew is executable inside the container
-                            sh './gradlew clean assemble' // This will now run inside the container
+                            sh 'chmod +x gradlew'
+                            sh './gradlew clean assemble'
                         }
                     }
                 }
@@ -90,15 +85,13 @@ pipeline {
 
                     dir('CA3/SpringBoot') {
                         // Using docker.withRegistry for pushing to Docker Hub
-                        // Make sure 'docker-hub-credentials' is set up in Jenkins Credentials
-                        // (Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials -> Username with password)
                         docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
                             def customImage = docker.build(
-                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}", // Tag with build number
-                                '.' // Build context is the current directory (CA3/SpringBoot)
+                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}",
+                                '.'
                             )
-                            customImage.push() // Push the build number tagged image
-                            customImage.push('latest') // Also tag and push as 'latest'
+                            customImage.push()
+                            customImage.push('latest')
                         }
                     }
                 }
@@ -115,7 +108,7 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Cleans up the workspace after every build
+            cleanWs()
         }
         success {
             echo "Pipeline succeeded!"
