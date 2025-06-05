@@ -1,23 +1,35 @@
-// Jenkinsfile for the Spring Boot Application pipeline
-
 pipeline {
-    agent { label 'built-in' }
+    agent any // You can also use agent { label 'built-in' } if you prefer to be explicit
 
-    // Define global environment variables here
     environment {
-        DOCKER_IMAGE_BASE_NAME = "falmeidaswitch/ca3-spring-app" // Your Docker Hub repository name
-        APP_VERSION = "${env.BUILD_NUMBER}" // Automatically uses Jenkins's build number for versioning
-    }
-
-    tools {
-        gradle 'gradle_latest'
+        DOCKER_IMAGE_BASE_NAME = 'falmeidaswitch/ca3-spring-app'
+        APP_VERSION = "$BUILD_NUMBER" // Automatically increments with each build
+        // IMPORTANT: Prepend Docker's bin directory to the PATH for this pipeline
+        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
     stages {
+        stage('Declarative: Checkout SCM') {
+            steps {
+                checkout scm // This checks out the Jenkinsfile itself
+            }
+        }
+
+        stage('Declarative: Tool Install') {
+            steps {
+                // This stage is automatically handled by Declarative Pipeline if you've configured tools globally
+                // No explicit 'tool' step needed here for standard tools like Gradle or Docker
+                echo "Tools are handled by Global Tool Configuration and environment setup."
+            }
+        }
+
         stage('Checkout Source Code') {
             steps {
-                echo 'Checking out Spring Boot application from remote Repository...'
-                git branch: 'main', url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git'
+                script {
+                    echo "Checking out Spring Boot application from remote Repository..."
+                    // This checks out your application code into the workspace
+                    git branch: 'main', url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git'
+                }
             }
         }
 
@@ -25,98 +37,100 @@ pipeline {
             steps {
                 script {
                     echo "--- Environment Variables Before Docker Commands ---"
-                    sh 'env' // This will print all environment variables
+                    sh 'env' // Displays current environment variables, good for debugging
                     echo "----------------------------------------------------"
+                    sh 'docker inspect -f . jenkins/agent:jdk17' // Confirms 'docker' is found by sh
 
-                    // This sh 'docker inspect' still runs on the built-in agent and is fine.
-                    sh 'docker inspect -f . jenkins/agent:jdk17'
-                }
-                // *** CRITICAL FIX: Add args to mount the docker socket for Docker access from inside the container ***
-                withDockerContainer(image: "jenkins/agent:jdk17", args: '-v /var/run/docker.sock:/var/run/docker.sock', toolName: 'maven') {
-                    // Now, commands run inside this block will have access to the host's Docker daemon
-                    dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        echo "Running Gradle assemble inside Docker container..."
-                        sh './gradlew assemble' // Or './gradlew build'
+                    // Use withDockerContainer to run build steps inside a Docker container
+                    // Make sure 'docker_default' matches the name configured in Global Tool Configuration
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('backend') {
+                            echo "Building backend..."
+                            sh './gradlew assemble'
+                        }
+                        dir('frontend') {
+                            echo "Building frontend..."
+                            sh 'npm install'
+                            sh 'npm run build'
+                        }
                     }
                 }
             }
         }
 
         stage('Test Spring Boot') {
-            agent {
-                docker image: 'jenkins/agent:jdk17',
-                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                        reuseNode: true
-            }
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    echo 'Executing J-unit Tests for Spring Boot...'
-                    sh './gradlew test'
-                    junit 'build/test-results/test/*.xml'
+                script {
+                    echo "Running tests..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('backend') {
+                            sh './gradlew test'
+                        }
+                    }
                 }
             }
         }
 
         stage('Build Docker Image') {
-            agent {
-                docker image: 'jenkins/agent:jdk17',
-                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                        reuseNode: true
-            }
             steps {
                 script {
-                    echo 'Copying JAR to Docker build context...'
-                    def springBootProjectDir = 'CA1/part3/react-and-spring-data-rest-basic'
-                    def dockerBuildDir = 'CA3/SpringBoot'
-
-                    sh "test -f ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar || { echo 'JAR not found! Build failed in previous stage?'; exit 1; }"
-                    sh "mkdir -p ${dockerBuildDir}"
-                    sh "cp ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar ${dockerBuildDir}/app.jar"
-
-                    echo 'Building Docker image for Spring Boot application...'
-                    // Use the globally defined variables here
-                    dockerImage = docker.build("${DOCKER_IMAGE_BASE_NAME}:${APP_VERSION}", dockerBuildDir)
-                    echo "Docker image built: ${dockerImage.id}"
+                    echo "Building Docker image ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}..."
+                    // Build the Docker image using the Dockerfile in the 'backend' directory
+                    withDockerContainer(image: 'docker', toolName: 'docker_default') { // Use the 'docker' image for building other images
+                        dir('backend') { // Assumes your Dockerfile is in the 'backend' directory
+                            sh "docker build -t ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} ."
+                            sh "docker tag ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} ${env.DOCKER_IMAGE_BASE_NAME}:latest"
+                        }
+                    }
                 }
             }
         }
 
         stage('Publish Docker Image') {
-            agent {
-                docker image: 'jenkins/agent:jdk17',
-                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                        reuseNode: true
-            }
             steps {
                 script {
-                    echo 'Publishing Docker image to Docker Hub...'
-                    docker.withRegistry('https://registry.hub.docker.com', 'FAlmeida-Switch') {
-                        dockerImage.push()
+                    echo "Publishing Docker image ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} to Docker Hub..."
+                    withDockerContainer(image: 'docker', toolName: 'docker_default') {
+                        // Ensure you have configured Docker Hub credentials in Jenkins
+                        // (Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials)
+                        // Kind: 'Username with password', Scope: 'Global', ID: 'dockerhub-credentials' (or whatever you name it)
+                        // Replace 'dockerhub-credentials' with your actual credential ID
+                        // Example: withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+                        //     sh "echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin"
+                        //     sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}"
+                        //     sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:latest"
+                        // }
+
+                        // For now, without login, it will only push if the repo is public and Docker Hub allows anonymous push (unlikely)
+                        // or if you're already logged in via Docker Desktop.
+                        sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}"
+                        sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:latest"
                     }
-                    echo "Docker image pushed to Docker Hub."
                 }
             }
         }
 
         stage('Archiving Spring Boot Artifacts') {
-            agent { label 'built-in' }
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    echo 'Archiving Spring Boot application artifacts...'
-                    archiveArtifacts 'build/libs/*.jar'
+                script {
+                    echo "Archiving build artifacts..."
+                    // Adjust this path if your build artifacts are located elsewhere
+                    archiveArtifacts artifacts: 'backend/build/libs/*.jar', fingerprint: true
+                    archiveArtifacts artifacts: 'frontend/build/*', fingerprint: true
                 }
             }
         }
     }
+
     post {
-        always {
-            cleanWs()
-        }
         failure {
-            echo 'Pipeline failed. Check logs for details.'
+            echo "Pipeline failed. Check logs for details."
         }
         success {
-            echo 'Pipeline completed successfully!'
+            echo "Pipeline succeeded!"
+        }
+        always {
+            cleanWs() // Cleans up the workspace after every build
         }
     }
 }
