@@ -16,17 +16,25 @@ pipeline {
         }
 
         stage('Assemble Spring Boot Frontend and Backend') {
-            agent {
-                // CORRECTED IMAGE NAME: jenkins/agent:jdk17
-                docker image: 'jenkins/agent:jdk17',
-                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                       reuseNode: true
-            }
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    echo 'Assembling Spring Boot project...'
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean assemble'
+                script {
+                    echo "--- Environment Variables Before Docker Commands ---"
+                    sh 'env' // This will print all environment variables
+                    echo "----------------------------------------------------"
+
+                    getContext()
+                    isUnix()
+                    withEnv(["DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}", "VERSION=${VERSION}"]) {
+                        sh 'docker inspect -f . jenkins/agent:jdk17'
+                    }
+                }
+                withDockerContainer(image: "jenkins/agent:jdk17", toolName: 'maven') {
+                    // This is where the pipeline will try to run docker commands inside the container
+                    // You'll likely need your Maven/Gradle build commands here to compile/package the app
+                    // Example (adjust paths as needed for your project structure):
+                    // dir('CA1/part3/react-and-spring-data-rest-basic') {
+                    //     sh './gradlew assemble'
+                    // }
                 }
             }
         }
@@ -35,8 +43,8 @@ pipeline {
             agent {
                 // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
-                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                       reuseNode: true
+                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                        reuseNode: true
             }
             steps {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
@@ -51,8 +59,8 @@ pipeline {
             agent {
                 // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
-                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                       reuseNode: true
+                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                        reuseNode: true
             }
             steps {
                 script {
@@ -75,8 +83,8 @@ pipeline {
             agent {
                 // CORRECTED IMAGE NAME: jenkins/agent:jdk17
                 docker image: 'jenkins/agent:jdk17',
-                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
-                       reuseNode: true
+                        args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                        reuseNode: true
             }
             steps {
                 script {
