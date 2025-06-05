@@ -18,12 +18,11 @@ pipeline {
         }
 
         stage('Assemble Spring Boot Frontend and Backend') {
+            // CORRECTED AGENT SYNTAX FOR STAGE-LEVEL DOCKER
             agent {
-                // Use a Docker agent with Java for Gradle build.
-                // Mount Docker socket to allow Docker commands from within this container.
-                image 'jenkins/jnlp-agent:jdk17'
-                args '-v /var/run/docker.sock:/var/run/docker.sock'
-                reuseNode true
+                docker image: 'jenkins/jnlp-agent:jdk17',
+                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                       reuseNode: true
             }
             steps {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
@@ -35,11 +34,11 @@ pipeline {
         }
 
         stage('Test Spring Boot') {
+            // CORRECTED AGENT SYNTAX FOR STAGE-LEVEL DOCKER
             agent {
-                // Reuse the same Docker agent for testing.
-                image 'jenkins/jnlp-agent:jdk17'
-                args '-v /var/run/docker.sock:/var/run/docker.sock' // Still needed if reuseNode fails for some reason
-                reuseNode true
+                docker image: 'jenkins/jnlp-agent:jdk17',
+                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                       reuseNode: true
             }
             steps {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
@@ -51,12 +50,11 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            // CORRECTED AGENT SYNTAX FOR STAGE-LEVEL DOCKER
             agent {
-                // Use Docker agent to build the application's Docker image.
-                // Critical: /var/run/docker.sock must be mounted to use Docker commands.
-                image 'jenkins/jnlp-agent:jdk17'
-                args '-v /var/run/docker.sock:/var/run/docker.sock'
-                reuseNode true
+                docker image: 'jenkins/jnlp-agent:jdk17',
+                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                       reuseNode: true
             }
             steps {
                 script {
@@ -64,7 +62,6 @@ pipeline {
                     def springBootProjectDir = 'CA1/part3/react-and-spring-data-rest-basic'
                     def dockerBuildDir = 'CA3/SpringBoot'
 
-                    // Ensure JAR exists and copy it to the Docker build context
                     sh "test -f ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar || { echo 'JAR not found! Build failed in previous stage?'; exit 1; }"
                     sh "mkdir -p ${dockerBuildDir}"
                     sh "cp ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar ${dockerBuildDir}/app.jar"
@@ -77,16 +74,15 @@ pipeline {
         }
 
         stage('Publish Docker Image') {
+            // CORRECTED AGENT SYNTAX FOR STAGE-LEVEL DOCKER
             agent {
-                // Reuse the same Docker agent for pushing the image.
-                image 'jenkins/jnlp-agent:jdk17'
-                args '-v /var/run/docker.sock:/var/run/docker.sock'
-                reuseNode true
+                docker image: 'jenkins/jnlp-agent:jdk17',
+                       args: '-v /var/run/docker.sock:/var/run/docker.sock',
+                       reuseNode: true
             }
             steps {
                 script {
                     echo 'Publishing Docker image to Docker Hub...'
-                    // 'FAlmeida-Switch' must be the ID of your Docker Hub credential in Jenkins.
                     docker.withRegistry('https://registry.hub.docker.com', 'FAlmeida-Switch') {
                         dockerImage.push()
                     }
@@ -96,7 +92,7 @@ pipeline {
         }
 
         stage('Archiving Spring Boot Artifacts') {
-            // Archive artifacts on the built-in node after the Docker agent is done.
+            // This stage runs on the built-in node, as it just handles files.
             agent { label 'built-in' }
             steps {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
