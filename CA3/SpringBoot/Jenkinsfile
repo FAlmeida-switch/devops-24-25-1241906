@@ -17,7 +17,7 @@ pipeline {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
                     echo 'Assembling Spring Boot project...'
                     sh 'chmod +x gradlew'
-                    sh './gradlew clean assemble'
+                    sh './gradlew clean assemble --info'
                 }
             }
         }
