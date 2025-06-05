@@ -3,19 +3,14 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
-        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // Set this in Jenkins credentials
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 
     stages {
+        // Single checkout stage is sufficient
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM',
-                          branches: [[name: '*/main']],
-                          extensions: [
-                            [$class: 'RelativeTargetDirectory', relativeTargetDir: '.']
-                          ],
-                          userRemoteConfigs: [[url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git']]
-                        ])
+                checkout scm
             }
         }
 
@@ -25,10 +20,8 @@ pipeline {
                     sh '''
                     echo "Project structure:"
                     ls -la
-                    echo "CA1/part3 contents:"
-                    ls -la CA1/part3
-                    echo "CA3/SpringBoot contents:"
-                    ls -la CA3/SpringBoot
+                    echo "Spring Boot project contents:"
+                    ls -la CA1/part3/react-and-spring-data-rest-basic
                     '''
                 }
             }
@@ -36,7 +29,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('CA1/part3') {
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
                     script {
                         sh 'chmod +x gradlew || true'
                         sh './gradlew clean assemble'
@@ -47,7 +40,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                dir('CA1/part3') {
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
                     script {
                         sh './gradlew test'
                         junit 'build/test-results/test/**/*.xml'
@@ -58,7 +51,7 @@ pipeline {
 
         stage('Generate Javadoc') {
             steps {
-                dir('CA1/part3') {
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
                     script {
                         sh './gradlew javadoc'
                         publishHTML([
@@ -78,7 +71,7 @@ pipeline {
             steps {
                 script {
                     // Copy built JAR to Docker context
-                    sh 'cp CA1/part3/build/libs/*.jar CA3/SpringBoot/'
+                    sh 'cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/'
 
                     dir('CA3/SpringBoot') {
                         docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
@@ -96,7 +89,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'CA1/part3/build/libs/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar', fingerprint: true
             }
         }
     }
