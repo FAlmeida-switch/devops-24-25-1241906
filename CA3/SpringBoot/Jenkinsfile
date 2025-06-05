@@ -2,51 +2,44 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BASE_NAME = 'falmeidaswitch/ca3-spring-app'
-        APP_VERSION = "$BUILD_NUMBER"
-        PATH = "/usr/local/bin:${env.PATH}"  // Updated Docker path
+        DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // Set this in Jenkins credentials
     }
 
     stages {
-        stage('Verify Environment') {
-            steps {
-                script {
-                    echo "Checking Docker installation..."
-                    sh 'docker --version'
-                    sh 'docker info'
-                    echo "Current PATH: ${PATH}"
-                }
-            }
-        }
-
-        stage('Checkout Source Code') {
+        stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
                           branches: [[name: '*/main']],
-                          extensions: [],
+                          extensions: [
+                            [$class: 'RelativeTargetDirectory', relativeTargetDir: '.']
+                          ],
                           userRemoteConfigs: [[url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git']]
                         ])
             }
         }
 
-        stage('Build Backend') {
+        stage('Verify Structure') {
             steps {
                 script {
-                    echo "Building Spring Boot backend..."
-                    dir('backend') {
-                        sh './gradlew assemble'
-                    }
+                    sh '''
+                    echo "Project structure:"
+                    ls -la
+                    echo "CA1/part3 contents:"
+                    ls -la CA1/part3
+                    echo "CA3/SpringBoot contents:"
+                    ls -la CA3/SpringBoot
+                    '''
                 }
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build Backend') {
             steps {
-                script {
-                    echo "Building frontend..."
-                    dir('frontend') {
-                        sh 'npm install'
-                        sh 'npm run build'
+                dir('CA1/part3') {
+                    script {
+                        sh 'chmod +x gradlew || true'
+                        sh './gradlew clean assemble'
                     }
                 }
             }
@@ -54,10 +47,28 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                script {
-                    echo "Running tests..."
-                    dir('backend') {
+                dir('CA1/part3') {
+                    script {
                         sh './gradlew test'
+                        junit 'build/test-results/test/**/*.xml'
+                    }
+                }
+            }
+        }
+
+        stage('Generate Javadoc') {
+            steps {
+                dir('CA1/part3') {
+                    script {
+                        sh './gradlew javadoc'
+                        publishHTML([
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'build/docs/javadoc',
+                            reportFiles: 'index.html',
+                            reportName: 'Javadoc'
+                        ])
                     }
                 }
             }
@@ -66,14 +77,18 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building Docker image..."
-                    docker.withRegistry('', '') {  // Add your Docker Hub credentials ID if needed
-                        def customImage = docker.build(
-                            "${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}",
-                            './backend'
-                        )
-                        customImage.push()
-                        customImage.push('latest')
+                    // Copy built JAR to Docker context
+                    sh 'cp CA1/part3/build/libs/*.jar CA3/SpringBoot/'
+
+                    dir('CA3/SpringBoot') {
+                        docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
+                            def customImage = docker.build(
+                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}",
+                                '.'
+                            )
+                            customImage.push()
+                            customImage.push('latest')
+                        }
                     }
                 }
             }
@@ -81,15 +96,13 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'backend/build/libs/*.jar', fingerprint: true
-                archiveArtifacts artifacts: 'frontend/build/**/*', fingerprint: true
+                archiveArtifacts artifacts: 'CA1/part3/build/libs/*.jar', fingerprint: true
             }
         }
     }
 
     post {
         always {
-            echo "Pipeline completed - cleaning up"
             cleanWs()
         }
         success {
