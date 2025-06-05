@@ -22,8 +22,6 @@ pipeline {
                     sh 'env' // This will print all environment variables
                     echo "----------------------------------------------------"
 
-                    getContext()
-                    isUnix()
                     withEnv(["DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}", "VERSION=${VERSION}"]) {
                         sh 'docker inspect -f . jenkins/agent:jdk17'
                     }
