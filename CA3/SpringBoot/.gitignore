@@ -1,0 +1,7 @@
+# Ignore the copied Spring Boot JAR
+app.jar
+
+# Ignore any potential temporary files or logs
+*.log
+*.tmp
+*.swp
