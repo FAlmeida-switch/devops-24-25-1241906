@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        // Comprehensive PATH including all possible Docker locations
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
+        // Use the correct Docker path from your system
+        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
     stages {
@@ -21,9 +21,9 @@ pipeline {
                     sh '''
                     echo "=== Environment Verification ==="
                     echo "Docker path:"
-                    which docker || echo "Docker not found in PATH"
+                    which docker
                     echo "Docker version:"
-                    /usr/local/bin/docker --version || docker --version || echo "Could not run docker"
+                    docker --version
                     echo "Java version:"
                     java -version
                     echo "Current PATH: $PATH"
@@ -32,15 +32,32 @@ pipeline {
             }
         }
 
-        stage('Build and Test') {
+        stage('Build Backend') {
             steps {
                 script {
-                    // Use direct shell commands instead of Docker pipeline steps
                     dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh 'chmod +x gradlew || true'
-                        sh './gradlew clean assemble -x installFrontend'
+                        // Skip all frontend-related tasks
+                        sh './gradlew clean assemble -x installFrontend -x resolvePackageManager -x installPackageManager -x cleanFrontend'
+                    }
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                script {
+                    dir('CA1/part3/react-and-spring-data-rest-basic') {
                         sh './gradlew test'
                         junit 'build/test-results/test/**/*.xml'
+                    }
+                }
+            }
+        }
+
+        stage('Generate Javadoc') {
+            steps {
+                script {
+                    dir('CA1/part3/react-and-spring-data-rest-basic') {
                         sh './gradlew javadoc'
                         publishHTML([
                             allowMissing: false,
@@ -58,12 +75,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Use direct docker commands with full path
                     sh '''
                     cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/
                     cd CA3/SpringBoot
-                    /usr/local/bin/docker build -t ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} .
-                    /usr/local/bin/docker tag ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} ${DOCKER_IMAGE_NAME}:latest
+                    docker build -t ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} .
+                    docker tag ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} ${DOCKER_IMAGE_NAME}:latest
                     '''
                 }
             }
@@ -78,9 +94,9 @@ pipeline {
                         usernameVariable: 'DOCKER_USERNAME'
                     )]) {
                         sh '''
-                        echo "$DOCKER_PASSWORD" | /usr/local/bin/docker login -u "$DOCKER_USERNAME" --password-stdin
-                        /usr/local/bin/docker push ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
-                        /usr/local/bin/docker push ${DOCKER_IMAGE_NAME}:latest
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                        docker push ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
+                        docker push ${DOCKER_IMAGE_NAME}:latest
                         '''
                     }
                 }
