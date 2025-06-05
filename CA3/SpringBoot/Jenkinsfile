@@ -13,11 +13,19 @@ pipeline {
 
         stage('Assemble Spring Boot') {
             steps {
-                // Correct path to my Spring Boot project
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
                     echo 'Assembling Spring Boot project...'
                     sh 'chmod +x gradlew'
-                    sh './gradlew clean assemble --stacktrace'
+
+                    // ADD THESE NEW LINES TO DEBUG npm INSTALL
+                    echo 'Debugging: Running npm install with verbose logging...'
+                    // The 'npm' executable might be in ./node/bin/npm as per your previous log,
+                    // so we'll use that direct path.
+                    sh './node/bin/npm install --loglevel verbose'
+                    echo 'Debugging: npm install command finished.'
+                    // END OF NEW LINES
+
+                    sh './gradlew clean assemble --stacktrace' // Keep this for now
                 }
             }
         }
