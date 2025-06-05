@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        // Use the correct Docker path from your system
         PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
@@ -26,18 +25,20 @@ pipeline {
                     docker --version
                     echo "Java version:"
                     java -version
-                    echo "Current PATH: $PATH"
                     '''
                 }
             }
         }
 
-        stage('Build Backend') {
+        stage('Build Backend Only') {
             steps {
                 script {
                     dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        // Skip all frontend-related tasks
-                        sh './gradlew clean assemble -x installFrontend -x resolvePackageManager -x installPackageManager -x cleanFrontend'
+                        // Completely disable frontend plugin
+                        sh '''
+                        sed -i '' '/frontend-gradle-plugin/d' build.gradle
+                        ./gradlew clean assemble --no-daemon
+                        '''
                     }
                 }
             }
@@ -47,7 +48,7 @@ pipeline {
             steps {
                 script {
                     dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh './gradlew test'
+                        sh './gradlew test --no-daemon'
                         junit 'build/test-results/test/**/*.xml'
                     }
                 }
@@ -58,7 +59,7 @@ pipeline {
             steps {
                 script {
                     dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh './gradlew javadoc'
+                        sh './gradlew javadoc --no-daemon'
                         publishHTML([
                             allowMissing: false,
                             alwaysLinkToLastBuild: true,
