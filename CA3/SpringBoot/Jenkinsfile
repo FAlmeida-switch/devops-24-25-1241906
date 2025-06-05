@@ -1,0 +1,87 @@
+// Jenkinsfile for the Spring Boot Application pipeline
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Source Code') {
+            steps {
+                echo 'Checking out Spring Boot application from remote Repository...'
+                git branch: 'main', url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git'
+            }
+        }
+
+        stage('Assemble Spring Boot') {
+            steps {
+                // Correct path to my Spring Boot project
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
+                    echo 'Assembling Spring Boot project...'
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean assemble'
+                }
+            }
+        }
+
+        stage('Build Spring Boot') {
+            steps {
+                // Correct path to my Spring Boot project
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
+                    echo 'Building Spring Boot project...'
+                    sh './gradlew clean build' // This will also run tests by default
+                }
+            }
+        }
+
+        stage('Test Spring Boot') {
+            steps {
+                // Correct path to my Spring Boot project
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
+                    echo 'Executing J-unit Tests for Spring Boot...'
+                    sh './gradlew test'
+                    junit 'build/test-results/test/*.xml'
+                }
+            }
+        }
+
+        //  Docker Stages
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Copying JAR to Docker build context...'
+                    def springBootProjectDir = 'CA1/part3/react-and-spring-data-rest-basic'
+                    def dockerBuildDir = 'CA3/SpringBoot' // Where my Dockerfile is
+
+                    sh "cp ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar ${dockerBuildDir}/app.jar"
+                    echo 'Building Docker image for Spring Boot application...'
+
+                    dockerImage = docker.build("falmeidaswitch/ca3-spring-app:${env.BUILD_NUMBER}", dockerBuildDir)
+                    echo "Docker image built: ${dockerImage.id}"
+                }
+            }
+        }
+
+        stage('Publish Docker Image') {
+            steps {
+                script {
+                    echo 'Publishing Docker image to Docker Hub...'
+                    // 'dockerhub-credentials' must match the ID in Jenkins Credentials
+                    docker.withRegistry('https://registry.hub.docker.com', 'FAlmeida-Switch') {
+                        dockerImage.push()
+                    }
+                    echo "Docker image pushed to Docker Hub."
+                }
+            }
+        }
+
+        stage('Archiving Spring Boot Artifacts') {
+            steps {
+                // Correct path to my Spring Boot project
+                dir('CA1/part3/react-and-spring-data-rest-basic') {
+                    echo 'Archiving Spring Boot application artifacts...'
+                    archiveArtifacts 'build/libs/*.jar'
+                }
+            }
+        }
+    }
+}
