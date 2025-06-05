@@ -1,71 +1,63 @@
 pipeline {
-    agent any // You can also use agent { label 'built-in' } if you prefer to be explicit
+    agent any
 
     environment {
         DOCKER_IMAGE_BASE_NAME = 'falmeidaswitch/ca3-spring-app'
-        APP_VERSION = "$BUILD_NUMBER" // Automatically increments with each build
-        // IMPORTANT: Prepend Docker's bin directory to the PATH for this pipeline
-        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
+        APP_VERSION = "$BUILD_NUMBER"
+        PATH = "/usr/local/bin:${env.PATH}"  // Updated Docker path
     }
 
     stages {
-        stage('Declarative: Checkout SCM') {
+        stage('Verify Environment') {
             steps {
-                checkout scm // This checks out the Jenkinsfile itself
-            }
-        }
-
-        stage('Declarative: Tool Install') {
-            steps {
-                // This stage is automatically handled by Declarative Pipeline if you've configured tools globally
-                // No explicit 'tool' step needed here for standard tools like Gradle or Docker
-                echo "Tools are handled by Global Tool Configuration and environment setup."
+                script {
+                    echo "Checking Docker installation..."
+                    sh 'docker --version'
+                    sh 'docker info'
+                    echo "Current PATH: ${PATH}"
+                }
             }
         }
 
         stage('Checkout Source Code') {
             steps {
-                script {
-                    echo "Checking out Spring Boot application from remote Repository..."
-                    // This checks out your application code into the workspace
-                    git branch: 'main', url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git'
-                }
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/main']],
+                          extensions: [],
+                          userRemoteConfigs: [[url: 'https://github.com/FAlmeida-switch/devops-24-25-1241906.git']]
+                        ])
             }
         }
 
-        stage('Assemble Spring Boot Frontend and Backend') {
+        stage('Build Backend') {
             steps {
                 script {
-                    echo "--- Environment Variables Before Docker Commands ---"
-                    sh 'env' // Displays current environment variables, good for debugging
-                    echo "----------------------------------------------------"
-                    sh 'docker inspect -f . jenkins/agent:jdk17' // Confirms 'docker' is found by sh
-
-                    // Use withDockerContainer to run build steps inside a Docker container
-                    // Make sure 'docker_default' matches the name configured in Global Tool Configuration
-                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
-                        dir('backend') {
-                            echo "Building backend..."
-                            sh './gradlew assemble'
-                        }
-                        dir('frontend') {
-                            echo "Building frontend..."
-                            sh 'npm install'
-                            sh 'npm run build'
-                        }
+                    echo "Building Spring Boot backend..."
+                    dir('backend') {
+                        sh './gradlew assemble'
                     }
                 }
             }
         }
 
-        stage('Test Spring Boot') {
+        stage('Build Frontend') {
+            steps {
+                script {
+                    echo "Building frontend..."
+                    dir('frontend') {
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+
+        stage('Run Tests') {
             steps {
                 script {
                     echo "Running tests..."
-                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
-                        dir('backend') {
-                            sh './gradlew test'
-                        }
+                    dir('backend') {
+                        sh './gradlew test'
                     }
                 }
             }
@@ -74,63 +66,37 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building Docker image ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}..."
-                    // Build the Docker image using the Dockerfile in the 'backend' directory
-                    withDockerContainer(image: 'docker', toolName: 'docker_default') { // Use the 'docker' image for building other images
-                        dir('backend') { // Assumes your Dockerfile is in the 'backend' directory
-                            sh "docker build -t ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} ."
-                            sh "docker tag ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} ${env.DOCKER_IMAGE_BASE_NAME}:latest"
-                        }
+                    echo "Building Docker image..."
+                    docker.withRegistry('', '') {  // Add your Docker Hub credentials ID if needed
+                        def customImage = docker.build(
+                            "${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}",
+                            './backend'
+                        )
+                        customImage.push()
+                        customImage.push('latest')
                     }
                 }
             }
         }
 
-        stage('Publish Docker Image') {
+        stage('Archive Artifacts') {
             steps {
-                script {
-                    echo "Publishing Docker image ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION} to Docker Hub..."
-                    withDockerContainer(image: 'docker', toolName: 'docker_default') {
-                        // Ensure you have configured Docker Hub credentials in Jenkins
-                        // (Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials)
-                        // Kind: 'Username with password', Scope: 'Global', ID: 'dockerhub-credentials' (or whatever you name it)
-                        // Replace 'dockerhub-credentials' with your actual credential ID
-                        // Example: withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
-                        //     sh "echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin"
-                        //     sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}"
-                        //     sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:latest"
-                        // }
-
-                        // For now, without login, it will only push if the repo is public and Docker Hub allows anonymous push (unlikely)
-                        // or if you're already logged in via Docker Desktop.
-                        sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:${env.APP_VERSION}"
-                        sh "docker push ${env.DOCKER_IMAGE_BASE_NAME}:latest"
-                    }
-                }
-            }
-        }
-
-        stage('Archiving Spring Boot Artifacts') {
-            steps {
-                script {
-                    echo "Archiving build artifacts..."
-                    // Adjust this path if your build artifacts are located elsewhere
-                    archiveArtifacts artifacts: 'backend/build/libs/*.jar', fingerprint: true
-                    archiveArtifacts artifacts: 'frontend/build/*', fingerprint: true
-                }
+                archiveArtifacts artifacts: 'backend/build/libs/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'frontend/build/**/*', fingerprint: true
             }
         }
     }
 
     post {
-        failure {
-            echo "Pipeline failed. Check logs for details."
+        always {
+            echo "Pipeline completed - cleaning up"
+            cleanWs()
         }
         success {
             echo "Pipeline succeeded!"
         }
-        always {
-            cleanWs() // Cleans up the workspace after every build
+        failure {
+            echo "Pipeline failed - check logs for details"
         }
     }
 }
