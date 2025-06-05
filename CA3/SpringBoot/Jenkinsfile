@@ -1,14 +1,16 @@
 pipeline {
-    agent any
+    agent any // You can also use agent { label 'built-in' } if you prefer to be explicit
 
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
-        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // Make sure you have these credentials configured in Jenkins
+        // IMPORTANT: Ensure Docker's bin directory is in the PATH for this pipeline
+        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
     stages {
-        // Single checkout stage is sufficient
-        stage('Checkout') {
+        // Single checkout stage is sufficient for the entire pipeline
+        stage('Checkout SCM') { // Renamed for clarity compared to your recent log
             steps {
                 checkout scm
             }
@@ -17,22 +19,28 @@ pipeline {
         stage('Verify Structure') {
             steps {
                 script {
-                    sh '''
                     echo "Project structure:"
-                    ls -la
-                    echo "Spring Boot project contents:"
-                    ls -la CA1/part3/react-and-spring-data-rest-basic
-                    '''
+                    sh 'ls -la'
+                    echo "Spring Boot project contents (CA1/part3/react-and-spring-data-rest-basic):"
+                    sh 'ls -la CA1/part3/react-and-spring-data-rest-basic'
                 }
             }
         }
 
-        stage('Build Backend') {
+        stage('Build Backend and Frontend') { // Combined this stage as per previous full Jenkinsfile
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    script {
-                        sh 'chmod +x gradlew || true'
-                        sh './gradlew clean assemble'
+                script {
+                    echo "Building Spring Boot backend and frontend inside a Docker container..."
+                    // Use withDockerContainer to run build steps inside a Docker container
+                    // 'jenkins/agent:jdk17' typically has Java, Git, and sometimes Node.js.
+                    // If Node.js is missing from 'jenkins/agent:jdk17', you might need 'node:lts-slim'
+                    // and then install Gradle inside it, or find a combined image.
+                    // Let's stick with jenkins/agent:jdk17 for now, if it fails, we'll address Node.js
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            sh 'chmod +x gradlew' // Ensure gradlew is executable inside the container
+                            sh './gradlew clean assemble' // This will now run inside the container
+                        }
                     }
                 }
             }
@@ -40,10 +48,13 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    script {
-                        sh './gradlew test'
-                        junit 'build/test-results/test/**/*.xml'
+                script {
+                    echo "Running tests inside a Docker container..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            sh './gradlew test'
+                            junit 'build/test-results/test/**/*.xml'
+                        }
                     }
                 }
             }
@@ -51,17 +62,20 @@ pipeline {
 
         stage('Generate Javadoc') {
             steps {
-                dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    script {
-                        sh './gradlew javadoc'
-                        publishHTML([
-                            allowMissing: false,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'build/docs/javadoc',
-                            reportFiles: 'index.html',
-                            reportName: 'Javadoc'
-                        ])
+                script {
+                    echo "Generating Javadoc inside a Docker container..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            sh './gradlew javadoc'
+                            publishHTML([
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'build/docs/javadoc',
+                                reportFiles: 'index.html',
+                                reportName: 'Javadoc'
+                            ])
+                        }
                     }
                 }
             }
@@ -70,17 +84,21 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Copy built JAR to Docker context
+                    echo "Building final Docker image..."
+                    // Copy built JAR to Docker context (assuming the JAR is in the 'backend' build path)
                     sh 'cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/'
 
                     dir('CA3/SpringBoot') {
+                        // Using docker.withRegistry for pushing to Docker Hub
+                        // Make sure 'docker-hub-credentials' is set up in Jenkins Credentials
+                        // (Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials -> Username with password)
                         docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
                             def customImage = docker.build(
-                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}",
-                                '.'
+                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}", // Tag with build number
+                                '.' // Build context is the current directory (CA3/SpringBoot)
                             )
-                            customImage.push()
-                            customImage.push('latest')
+                            customImage.push() // Push the build number tagged image
+                            customImage.push('latest') // Also tag and push as 'latest'
                         }
                     }
                 }
@@ -89,6 +107,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
+                echo "Archiving build artifacts..."
                 archiveArtifacts artifacts: 'CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar', fingerprint: true
             }
         }
@@ -96,7 +115,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            cleanWs() // Cleans up the workspace after every build
         }
         success {
             echo "Pipeline succeeded!"
