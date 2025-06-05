@@ -1,1 +1,1 @@
-/Users/chication/IdeaProjects/devops-24-25-1241906/CA1/part3/react-and-spring-data-rest-basic/node/bin/npm
+/usr/local/Cellar/node/23.10.0_1/bin/npm

@@ -1,7 +1,16 @@
 // Jenkinsfile for the Spring Boot Application pipeline
 
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'jenkins/inbound-agent:jdk17'
+        }
+    }
+
+    // 2. Define tools that Jenkins should provide (like Gradle)
+    tools {
+        gradle 'gradle_latest' // <--- REPLACE 'gradle_latest' with the exact name you configured in Jenkins
+    }
 
     stages {
         stage('Checkout Source Code') {
@@ -11,38 +20,30 @@ pipeline {
             }
         }
 
-        stage('Assemble Spring Boot') {
+        // 3. Combine Assemble (including Frontend) and potentially Build into one stage
+        stage('Assemble Spring Boot Frontend and Backend') {
             steps {
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    echo 'Assembling Spring Boot project...'
+                    echo 'Assembling Spring Boot project (including frontend with Gradle plugin)...'
                     sh 'chmod +x gradlew'
-
-                    // ADD THESE NEW LINES TO DEBUG npm INSTALL
-                    echo 'Debugging: Running npm install with verbose logging...'
-                    // The 'npm' executable might be in ./node/bin/npm as per your previous log,
-                    // so we'll use that direct path.
-                    sh './node/bin/npm install --loglevel verbose'
-                    echo 'Debugging: npm install command finished.'
-                    // END OF NEW LINES
-
-                    sh './gradlew clean assemble --stacktrace' // Keep this for now
+                    sh './gradlew clean assemble'
                 }
             }
         }
 
-        stage('Build Spring Boot') {
+        // 4. The 'Build Spring Boot' stage is somewhat redundant if 'assemble' successfully
+        // builds the JAR. You can remove this stage if 'assemble' creates the final JAR.
+        stage('Build Spring Boot (Optional - usually handled by assemble)') {
             steps {
-                // Correct path to my Spring Boot project
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
-                    echo 'Building Spring Boot project...'
-                    sh './gradlew clean build' // This will also run tests by default
+                    echo 'Building Spring Boot project (if not already done by assemble)...'
+                    sh './gradlew build'
                 }
             }
         }
 
         stage('Test Spring Boot') {
             steps {
-                // Correct path to my Spring Boot project
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
                     echo 'Executing J-unit Tests for Spring Boot...'
                     sh './gradlew test'
@@ -51,18 +52,20 @@ pipeline {
             }
         }
 
-        //  Docker Stages
-
+        // Docker Stages (These look mostly fine, assuming paths are correct)
         stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Copying JAR to Docker build context...'
                     def springBootProjectDir = 'CA1/part3/react-and-spring-data-rest-basic'
-                    def dockerBuildDir = 'CA3/SpringBoot' // Where my Dockerfile is
+                    def dockerBuildDir = 'CA3/SpringBoot' // Where my Dockerfile is located
 
+                    // Add a check to ensure the JAR exists before copying
+                    sh "test -f ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar || { echo 'JAR not found! Build failed in previous stage?'; exit 1; }"
                     sh "cp ${springBootProjectDir}/build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar ${dockerBuildDir}/app.jar"
                     echo 'Building Docker image for Spring Boot application...'
 
+                    // Using a specific image tag based on the BUILD_NUMBER
                     dockerImage = docker.build("falmeidaswitch/ca3-spring-app:${env.BUILD_NUMBER}", dockerBuildDir)
                     echo "Docker image built: ${dockerImage.id}"
                 }
@@ -73,7 +76,7 @@ pipeline {
             steps {
                 script {
                     echo 'Publishing Docker image to Docker Hub...'
-                    // 'dockerhub-credentials' must match the ID in Jenkins Credentials
+                    // 'FAlmeida-Switch' must match the ID of your Docker Hub credentials in Jenkins
                     docker.withRegistry('https://registry.hub.docker.com', 'FAlmeida-Switch') {
                         dockerImage.push()
                     }
@@ -84,12 +87,16 @@ pipeline {
 
         stage('Archiving Spring Boot Artifacts') {
             steps {
-                // Correct path to my Spring Boot project
                 dir('CA1/part3/react-and-spring-data-rest-basic') {
                     echo 'Archiving Spring Boot application artifacts...'
                     archiveArtifacts 'build/libs/*.jar'
                 }
             }
+        }
+    }
+    post {
+        always {
+            cleanWs() // Clean up the workspace after the build
         }
     }
 }
