@@ -1,73 +1,83 @@
 pipeline {
-    agent any
+    agent any //
 
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
     stages {
-        stage('Checkout') {
+        // Single checkout stage is sufficient for the entire pipeline
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Verify Environment') {
+        stage('Verify Structure') {
             steps {
                 script {
-                    sh '''
-                    echo "=== Environment Verification ==="
-                    echo "Docker path:"
-                    which docker
-                    echo "Docker version:"
-                    docker --version
-                    echo "Java version:"
-                    java -version
-                    '''
+                    echo "Project structure:"
+                    sh 'ls -la'
+                    echo "Spring Boot project contents (CA1/part3/react-and-spring-data-rest-basic):"
+                    sh 'ls -la CA1/part3/react-and-spring-data-rest-basic'
+                    echo '=== Environment Verification ===' // Added for consistency, from your recent log
+                    echo 'Docker path:'
+                    sh 'which docker'
+                    echo 'Docker version:'
+                    sh 'docker --version'
+                    echo 'Java version:'
+                    sh 'java -version'
                 }
             }
         }
 
-        stage('Build Backend Only') {
+        stage('Build Backend and Frontend') { // Re-added withDockerContainer
             steps {
                 script {
-                    dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        // Completely disable frontend plugin
-                        sh '''
-                        sed -i '' '/frontend-gradle-plugin/d' build.gradle
-                        ./gradlew clean assemble --no-daemon
-                        '''
+                    echo "Building Spring Boot backend and frontend inside a Docker container..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            // Your sed command from the log:
+                            sh 'sed -i "" /frontend-gradle-plugin/d build.gradle || true' // Added || true to prevent build failure if file not found
+                            sh 'chmod +x gradlew'
+                            sh './gradlew clean assemble --no-daemon'
+                        }
                     }
                 }
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests') { // Re-added withDockerContainer
             steps {
                 script {
-                    dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh './gradlew test --no-daemon'
-                        junit 'build/test-results/test/**/*.xml'
+                    echo "Running tests inside a Docker container..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            sh './gradlew test'
+                            junit 'build/test-results/test/**/*.xml'
+                        }
                     }
                 }
             }
         }
 
-        stage('Generate Javadoc') {
+        stage('Generate Javadoc') { // Re-added withDockerContainer
             steps {
                 script {
-                    dir('CA1/part3/react-and-spring-data-rest-basic') {
-                        sh './gradlew javadoc --no-daemon'
-                        publishHTML([
-                            allowMissing: false,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'build/docs/javadoc',
-                            reportFiles: 'index.html',
-                            reportName: 'Javadoc'
-                        ])
+                    echo "Generating Javadoc inside a Docker container..."
+                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                        dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            sh './gradlew javadoc'
+                            publishHTML([
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'build/docs/javadoc',
+                                reportFiles: 'index.html',
+                                reportName: 'Javadoc'
+                            ])
+                        }
                     }
                 }
             }
@@ -76,29 +86,20 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
-                    cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/
-                    cd CA3/SpringBoot
-                    docker build -t ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} .
-                    docker tag ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} ${DOCKER_IMAGE_NAME}:latest
-                    '''
-                }
-            }
-        }
+                    echo "Building final Docker image..."
+                    // Copy built JAR to Docker context (assuming the JAR is in the 'backend' build path)
+                    sh 'cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/'
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(
-                        credentialsId: env.DOCKER_CREDENTIALS_ID,
-                        passwordVariable: 'DOCKER_PASSWORD',
-                        usernameVariable: 'DOCKER_USERNAME'
-                    )]) {
-                        sh '''
-                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                        docker push ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
-                        docker push ${DOCKER_IMAGE_NAME}:latest
-                        '''
+                    dir('CA3/SpringBoot') {
+                        // Using docker.withRegistry for pushing to Docker Hub
+                        docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
+                            def customImage = docker.build(
+                                "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}",
+                                '.'
+                            )
+                            customImage.push()
+                            customImage.push('latest')
+                        }
                     }
                 }
             }
@@ -106,6 +107,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
+                echo "Archiving build artifacts..."
                 archiveArtifacts artifacts: 'CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar', fingerprint: true
             }
         }
