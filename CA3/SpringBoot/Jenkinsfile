@@ -1,13 +1,13 @@
 pipeline {
-    agent any //
+    agent any
 
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+        // PATH line remains REMOVED here. Jenkins should find Docker via global PATH.
     }
 
     stages {
-        // Single checkout stage is sufficient for the entire pipeline
         stage('Checkout SCM') {
             steps {
                 checkout scm
@@ -21,7 +21,7 @@ pipeline {
                     sh 'ls -la'
                     echo "Spring Boot project contents (CA1/part3/react-and-spring-data-rest-basic):"
                     sh 'ls -la CA1/part3/react-and-spring-data-rest-basic'
-                    echo '=== Environment Verification ===' // Added for consistency, from your recent log
+                    echo '=== Environment Verification ==='
                     echo 'Docker path:'
                     sh 'which docker'
                     echo 'Docker version:'
@@ -32,14 +32,14 @@ pipeline {
             }
         }
 
-        stage('Build Backend and Frontend') { // Re-added withDockerContainer
+        stage('Build Backend and Frontend') {
             steps {
                 script {
                     echo "Building Spring Boot backend and frontend inside a Docker container..."
-                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
+                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            // Your sed command from the log:
-                            sh 'sed -i "" /frontend-gradle-plugin/d build.gradle || true' // Added || true to prevent build failure if file not found
+                            sh 'sed -i "" /frontend-gradle-plugin/d build.gradle || true'
                             sh 'chmod +x gradlew'
                             sh './gradlew clean assemble --no-daemon'
                         }
@@ -48,11 +48,12 @@ pipeline {
             }
         }
 
-        stage('Run Tests') { // Re-added withDockerContainer
+        stage('Run Tests') {
             steps {
                 script {
                     echo "Running tests inside a Docker container..."
-                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
+                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
                             sh './gradlew test'
                             junit 'build/test-results/test/**/*.xml'
@@ -62,11 +63,12 @@ pipeline {
             }
         }
 
-        stage('Generate Javadoc') { // Re-added withDockerContainer
+        stage('Generate Javadoc') {
             steps {
                 script {
                     echo "Generating Javadoc inside a Docker container..."
-                    withDockerContainer(image: 'jenkins/agent:jdk17', toolName: 'docker_default') {
+                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
+                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
                             sh './gradlew javadoc'
                             publishHTML([
@@ -87,11 +89,9 @@ pipeline {
             steps {
                 script {
                     echo "Building final Docker image..."
-                    // Copy built JAR to Docker context (assuming the JAR is in the 'backend' build path)
                     sh 'cp CA1/part3/react-and-spring-data-rest-basic/build/libs/*.jar CA3/SpringBoot/'
 
                     dir('CA3/SpringBoot') {
-                        // Using docker.withRegistry for pushing to Docker Hub
                         docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
                             def customImage = docker.build(
                                 "${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}",
