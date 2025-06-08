@@ -39,9 +39,9 @@ pipeline {
                     // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
                     withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            sh 'sed -i "" /frontend-gradle-plugin/d build.gradle || true'
+                            sh "sed -i '' '/frontend-gradle-plugin/d' build.gradle || true"
                             sh 'chmod +x gradlew'
-                            sh './gradlew clean assemble --no-daemon'
+                            sh 'export NPM_CONFIG_CACHE=./.npm_cache && ./gradlew clean assemble --no-daemon'
                         }
                     }
                 }
