@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'falmeidaswitch/ca3-spring-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        // PATH line remains REMOVED here. Jenkins should find Docker via global PATH.
     }
 
     stages {
@@ -36,11 +35,12 @@ pipeline {
             steps {
                 script {
                     echo "Building Spring Boot backend and frontend inside a Docker container..."
-                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
-                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
+                    withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
                             sh 'chmod +x gradlew'
-                            sh './gradlew clean assemble --no-daemon'
+                            // --- IMPORTANT CHANGE HERE: Add NPM_CONFIG_CACHE before gradlew ---
+                            sh 'NPM_CONFIG_CACHE="node_cache" ./gradlew clean assemble --no-daemon'
+                            // This will create a 'node_cache' directory inside 'CA1/part3/react-and-spring-data-rest-basic/'
                         }
                     }
                 }
@@ -51,9 +51,9 @@ pipeline {
             steps {
                 script {
                     echo "Running tests inside a Docker container..."
-                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
-                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
+                    withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            // You might want to set NPM_CONFIG_CACHE here too if tests also depend on npm
                             sh './gradlew test'
                             junit 'build/test-results/test/**/*.xml'
                         }
@@ -66,9 +66,9 @@ pipeline {
             steps {
                 script {
                     echo "Generating Javadoc inside a Docker container..."
-                    // --- IMPORTANT CHANGE HERE: Removed toolName parameter ---
-                    withDockerContainer(image: 'jenkins/agent:jdk17') { // <--- NO toolName here
+                    withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
+                            // And possibly here as well
                             sh './gradlew javadoc'
                             publishHTML([
                                 allowMissing: false,
