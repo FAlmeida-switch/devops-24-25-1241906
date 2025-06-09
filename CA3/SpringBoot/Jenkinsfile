@@ -38,9 +38,9 @@ pipeline {
                     withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
                             sh 'chmod +x gradlew'
-                            // --- IMPORTANT CHANGE HERE: Add NPM_CONFIG_CACHE before gradlew ---
-                            sh 'NPM_CONFIG_CACHE="node_cache" ./gradlew clean assemble --no-daemon'
-                            // This will create a 'node_cache' directory inside 'CA1/part3/react-and-spring-data-rest-basic/'
+                            // --- IMPORTANT CHANGE HERE: Set HOME environment variable ---
+                            sh 'HOME=$PWD ./gradlew clean assemble --no-daemon'
+                            // $PWD expands to the current working directory, making ~/.cache resolve to project_root/.cache
                         }
                     }
                 }
@@ -53,8 +53,8 @@ pipeline {
                     echo "Running tests inside a Docker container..."
                     withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            // You might want to set NPM_CONFIG_CACHE here too if tests also depend on npm
-                            sh './gradlew test'
+                            // Apply HOME=$PWD here too, just in case tests use npm directly
+                            sh 'HOME=$PWD ./gradlew test'
                             junit 'build/test-results/test/**/*.xml'
                         }
                     }
@@ -68,8 +68,8 @@ pipeline {
                     echo "Generating Javadoc inside a Docker container..."
                     withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            // And possibly here as well
-                            sh './gradlew javadoc'
+                            // Apply HOME=$PWD here too, if Javadoc generation could use npm
+                            sh 'HOME=$PWD ./gradlew javadoc'
                             publishHTML([
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: true,
