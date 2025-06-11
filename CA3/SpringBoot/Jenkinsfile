@@ -32,20 +32,18 @@ pipeline {
         }
 
         stage('Build Backend and Frontend') {
-            steps {
-                script {
-                    echo "Building Spring Boot backend and frontend inside a Docker container..."
-                    withDockerContainer(image: 'jenkins/agent:jdk17') {
-                        dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            sh 'chmod +x gradlew'
-                            // --- IMPORTANT CHANGE HERE: Set HOME environment variable ---
-                            sh 'HOME=$PWD ./gradlew clean assemble --no-daemon'
-                            // $PWD expands to the current working directory, making ~/.cache resolve to project_root/.cache
+                    steps {
+                        script {
+                            echo "Building Spring Boot backend and frontend inside a Docker container..."
+                            withDockerContainer(image: 'jenkins/agent:jdk17') {
+                                dir('CA1/part3/react-and-spring-data-rest-basic') {
+                                    sh 'chmod +x gradlew'
+                                    sh 'HOME=$PWD ./gradlew clean bootJar --no-daemon'
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
 
         stage('Run Tests') {
             steps {
@@ -53,7 +51,6 @@ pipeline {
                     echo "Running tests inside a Docker container..."
                     withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            // Apply HOME=$PWD here too, just in case tests use npm directly
                             sh 'HOME=$PWD ./gradlew test'
                             junit 'build/test-results/test/**/*.xml'
                         }
@@ -68,7 +65,6 @@ pipeline {
                     echo "Generating Javadoc inside a Docker container..."
                     withDockerContainer(image: 'jenkins/agent:jdk17') {
                         dir('CA1/part3/react-and-spring-data-rest-basic') {
-                            // Apply HOME=$PWD here too, if Javadoc generation could use npm
                             sh 'HOME=$PWD ./gradlew javadoc'
                             publishHTML([
                                 allowMissing: false,
